@@ -7,7 +7,7 @@
 // Therefore, we check that _LIBSPMV_, a macro defined in the top-level header file, is
 // defined. Otherwise, we throw an error.
 
-#ifndef _LIBSPMV_
+#ifndef __SPMV__
 #  error("unit_test_framework.hpp must be included AFTER SpMV.hpp!")
 #endif
 

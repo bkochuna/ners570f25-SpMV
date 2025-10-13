@@ -1,23 +1,25 @@
+#include <iostream>
 #include "SpMV.hpp"
 
-#include <iostream>
-
-// Traditionally, main takes two arguments: argc and argv.
-// These are the number of command line arguments and the arguments themselves.
-// int main(int argc, char* argv[])
-// However, we don't need them for this example.
-int main()
+int main(/* int argc, char* argv[] */)
 {
-  std::cout << "Hello World!\n";
+    std::cout << "Hello World!" << std::endl;
 
-  SpMV::SparseMatrix* ptr_A = new SpMV::SparseMatrix_COO();
+    SpMV::SparseMatrix<float>* ptr_A = new SpMV::SparseMatrix_COO<float>(20,20);
 
-  // New scoping unit. This means variables defined in here, stay here.
-  {
-    SpMV::SparseMatrix_COO A = SpMV::SparseMatrix_COO();
-  }
+    ptr_A->setValue(0,0,0.0);
 
-  delete(ptr_A);
+    // New scoping unit. This means variables defined in here, stay here.
+    {
+        SpMV::SparseMatrix_COO<double> A = SpMV::SparseMatrix_COO<double>(10000,10);
+        std::cout << "Lets do stuff to A!" << std::endl;
+        double a = A.getValue(0,0);
+        std::cout << "a(0,0)=" << a << std::endl;
+        A.assemble();
+    }
 
-  return 0;
+    delete(ptr_A);
+    ptr_A = NULL;
+
+    return 0;
 }
