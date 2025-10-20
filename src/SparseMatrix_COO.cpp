@@ -1,7 +1,5 @@
 #include "SparseMatrix_COO.hpp"
 
-#include <iostream>
-#include <stddef.h>
 
 using namespace std;
 

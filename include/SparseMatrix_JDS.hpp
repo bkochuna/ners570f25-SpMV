@@ -2,6 +2,7 @@
 #define __SPMV_SparseMatrix_JDS__
 
 #include "SparseMatrix.hpp"
+#include <iostream>
 
 namespace SpMV
 {
@@ -11,6 +12,9 @@ namespace SpMV
         public:
             SparseMatrix_JDS(const size_t nrows, const size_t ncols);
             void assemble();
+            printJDSToCounsole();
+            printJDSElementToConsole(const size_t row, const size_t column);
+            printJDSToLogFile(const std::string& filename);
     };
 }
 
