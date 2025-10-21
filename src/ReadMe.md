@@ -1,12 +1,10 @@
-JDS View Method
-Author: Sander Katz
-Date: 10/21/25
+JDS View Method  
+Author: Sander Katz  
+Date: 10/21/25  
 
-A No-Pro Pro Industries LLC Production
-
-All Rights Reserved
-
-Glow Blue
+A No-Pro Pro Industries LLC Production  
+All Rights Reserved  
+Glow Blue  
 
 
 # SparseMatrix_JDS Print and View Methods
