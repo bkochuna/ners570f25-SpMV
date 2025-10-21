@@ -10,11 +10,17 @@ namespace SpMV
     class SparseMatrix_JDS : public SparseMatrix<fp_type>
     {
         public:
-            SparseMatrix_JDS(const size_t nrows, const size_t ncols);
-            void assemble();
-            printJDSToCounsole();
-            printJDSElementToConsole(const size_t row, const size_t column);
-            printJDSToLogFile(const std::string& filename);
+            printJDSInputMatrixSummary() const;
+            printJDSInputVectorSummary() const;
+            printJDSResultVectorSummary() const;
+            printJDSMatrixToConsole() const;
+            printJDSVectorToConsole() const;
+            printJDSResultVectorToConsole() const;
+            printJDSMatrixElementToConsole(const size_t row, const size_t column) const;
+            printJDSVectorElementToConsole(const size_t index) const;
+            printJDSResultVectorElementToConsole(const size_t index) const;
+            printJDSMatrixRow(size_t row) const;
+            printJDSResultVectorToLogFile(const std::string& filename) const;
     };
 }
 
