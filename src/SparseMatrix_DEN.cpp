@@ -1,4 +1,5 @@
 #include "SparseMatrix_DEN.hpp"
+#include <iostream>
 #include <memory>
 #include <algorithm>
 #include <string>
@@ -10,17 +11,17 @@ namespace SpMV
 
 	////// Constructor Definition
     template <class fp_type>
-    SparseMatrix_DEN<fp_type>::SparseMatrix_DEN(const size_t nrow, const size_t ncols) :
+    SparseMatrix_DEN<fp_type>::SparseMatrix_DEN(const size_t nrows, const size_t ncols) :
         SparseMatrix<fp_type>::SparseMatrix(nrows, ncols)
     {
-        cout << "Hello from SparseMatrix_DEN Constructor!" << endl;
+        std::cout << "Hello from SparseMatrix_DEN Constructor!" << std::endl;
 
         // Initialize Matrix
         _Matrix = std::make_unique<std::unique_ptr<fp_type[]>[]>(this->_nrows);
 
-        for (int i = 0; i < this->_nrows; ++i) {
-            _Matrix[i] = std::make_unique<fp_type[]>(this->_ncols);
-            std::fill(_Matrix[i].get(), _Matrix[i].get() + this->_ncols, 0.0);
+        for (size_t i = 0; i < this->_nrows; ++i) {
+            this->_Matrix[i] = std::make_unique<fp_type[]>(this->_ncols);
+            std::fill(this->_Matrix[i].get(), this->_Matrix[i].get() + this->_ncols, 0.0);
         }
 
         // Set State to Initialized (Parent Constructor Already Does This)
@@ -35,7 +36,10 @@ namespace SpMV
 
 
 	////// Storage Function(s)
-
+	template <class fp_type>
+	void SparseMatrix_DEN<fp_type>::assemble() {
+		std::cout << "Placeholder for assemble Fcn" << std::endl;
+	}
 
 
 	////// Accessor Function(s)

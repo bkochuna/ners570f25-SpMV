@@ -14,7 +14,7 @@ namespace SpMV
 
 
         public:
-            SparseMatrix_DEN(const size_t nrows, const size_t ncols) // Constructor
+            SparseMatrix_DEN(const size_t nrows, const size_t ncols); // Constructor
             ~SparseMatrix_DEN(); // Destructor
             void assemble();
     };
