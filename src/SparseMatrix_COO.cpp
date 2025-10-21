@@ -21,6 +21,20 @@ namespace SpMV
 
         //This routine needs to convert _buildCoeff into the COO storage format.
     }
+
+    template <class fp_type>
+    void SparseMatrix_COO<fp_type>::setValue(const size_t i, const size_t j, fp_type val) :
+        SparseMatrix<fp_type>::setValue(i, j, val)
+    {
+        cout << "Hello from COO setValue" << endl;
+    }
+
+    template <class fp_type>
+    fp_type SparseMatrix_COO<fp_type>::getValue(const size_t i, const size_t j) :
+        SparseMatrix<fp_type>::getValue(i, j)
+    {
+        cout << "Hello from COO getValue" << endl;
+    }
 }
 
 // Need to declare the concrete templates within the library for
