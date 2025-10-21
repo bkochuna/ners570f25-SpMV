@@ -20,8 +20,8 @@ namespace SpMV
         _Matrix = std::make_unique<std::unique_ptr<fp_type[]>[]>(this->_nrows);
 
         for (size_t i = 0; i < this->_nrows; ++i) {
-            this->_Matrix[i] = std::make_unique<fp_type[]>(this->_ncols);
-            std::fill(this->_Matrix[i].get(), this->_Matrix[i].get() + this->_ncols, 0.0);
+            _Matrix[i] = std::make_unique<fp_type[]>(this->_ncols);
+            std::fill(_Matrix[i].get(), _Matrix[i].get() + this->_ncols, 0.0);
         }
 
         // Set State to Initialized (Parent Constructor Already Does This)
