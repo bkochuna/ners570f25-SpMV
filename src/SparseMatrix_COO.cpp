@@ -63,7 +63,7 @@ namespace SpMV
 
         //For loop to perform matvec
         for (size_t i=0; i < (this->_numnz) ; i++) {
-            b[this->idx_row[i]] += this->aij[i] * x[this->idx_col[i]]; // TODO: need to first copy mem to new array? can I call idx_col without the "this->"?
+            b[this->idx_row[i]] += this->aij[i] * x[this->idx_col[i]]; 
         }
 
         return b;
