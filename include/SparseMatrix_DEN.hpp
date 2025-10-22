@@ -19,5 +19,7 @@ namespace SpMV
             std::vector<fp_type> matvec(const std::vector<fp_type>& x) const;
         private:
             std::vector<fp_type> _data;
-    }
+    };
 }
+
+#endif
