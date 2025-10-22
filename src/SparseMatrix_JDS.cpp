@@ -46,6 +46,55 @@ namespace SpMV
     }
 }
 
+
+// Accessor method implementations
+template <class fp_type>
+const std::vector<fp_type>& SpMV::SparseMatrix_JDS<fp_type>::get_jdiag() const {
+    return val.data();
+}
+
+template <class fp_type>
+const std::vector<size_t>& SpMV::SparseMatrix_JDS<fp_type>::get_col_ind() const {
+    return col_idx.data();
+}
+
+template <class fp_type>
+const std::vector<size_t>& SpMV::SparseMatrix_JDS<fp_type>::get_perm() const {
+    return perm.data();
+}
+
+template <class fp_type>
+const std::vector<size_t>& SpMV::SparseMatrix_JDS<fp_type>::get_jd_ptr() const {
+    return jd_ptr.data();
+}
+
+template <class fp_type>
+size_t SpMV::SparseMatrix_JDS<fp_type>::get_nz() const {
+    return val.size();
+}
+
+template <class fp_type>
+size_t SpMV::SparseMatrix_JDS<fp_type>::get_ncol() const {
+    return this->_ncols;
+}
+
+template <class fp_type>
+size_t SpMV::SparseMatrix_JDS<fp_type>::get_nrow() const {
+    return this->_nrows;
+}
+
+template <class fp_type>
+size_t SpMV::SparseMatrix_JDS<fp_type>::get_maxnz_row() const { // Calculate the maximum number of non-zeroes per row
+    if (jd_ptr.empty()) return 0;
+    size_t max_len = 0;
+    for (size_t i = 0; i < jd_ptr.size() - 1; i++) {
+        size_t len = jd_ptr[i+1] - jd_ptr[i];
+        if (len > max_len) max_len = len;
+    }
+    return max_len;
+}
+
+
 // Need to declare the concrete templates within the library
 // for use in code that links to libspmv
 template class SpMV::SparseMatrix_JDS<float>;

@@ -25,6 +25,20 @@ namespace SpMV
         
 	// Implement matveck
         void matvec(const std::vector<fp_type>& x, std::vector<fp_type>& y) const;
+
+
+	// Accessor Methods
+	// Array accessors (Map these to Lecture 12 naming in src)
+	const fp_type* get_jdiag() const;
+	const size_t* get_col_ind() const;
+	const size_t* get_perm() const;
+	const size_t* get_jd_ptr() const;
+
+	// Scalar accessors
+	size_t get_nz() const;
+        size_t get_ncol() const;
+        size_t get_nrow() const;
+	size_t get_maxnz_row() const;
     };
 }
 
