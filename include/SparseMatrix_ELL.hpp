@@ -16,6 +16,7 @@ public:
   SparseMatrix_ELL(const size_t nrows, const size_t ncols);
   ~SparseMatrix_ELL();
   void assemble();
+  void viewMat();
 };
 } // namespace SpMV
 
