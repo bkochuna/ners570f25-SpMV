@@ -13,6 +13,9 @@ int main(/* int argc, char* argv[] */)
     {
         SpMV::SparseMatrix_COO<double> A = SpMV::SparseMatrix_COO<double>(10000,10);
         std::cout << "Lets do stuff to A!" << std::endl;
+        A.setValue(1,1,5.6);
+        A.setValue(4,6, -10.5);
+        A.view();
         double a = A.getValue(0,0);
         std::cout << "a(0,0)=" << a << std::endl;
         A.assemble();
