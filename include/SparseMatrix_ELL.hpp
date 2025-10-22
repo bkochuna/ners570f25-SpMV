@@ -8,6 +8,7 @@ namespace SpMV {
 template <class fp_type> class SparseMatrix_ELL : public SparseMatrix<fp_type> {
 protected:
   size_t _maxNnzPerRow = 0;
+  int paddingValue = -1; // Value to use to indicate padding in column indices
   std::vector<fp_type> _values{};
   std::vector<int> _colIndices{}; // signed to allow -1 for padding (if desired
                                   // by matVec implementation)
