@@ -29,7 +29,7 @@ namespace SpMV
     template <class fp_type>
     void SparseMatrix_COO<fp_type>::view()
     {
-        assert(this->_state >= MatrixState::initialized);
+        assert(this->_state >= MatrixState::assembled);
 
         //print out the header;
         cout << "This is a matrix stored in the COO format. ";
