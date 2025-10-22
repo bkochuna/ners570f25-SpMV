@@ -43,8 +43,15 @@ namespace SpMV
 
 
 	////// Accessor Function(s)
+	template <class fp_type>
+	fp_type SparseMatrix<fp_type>::getValue(const size_t i, const size_t j){
+    		assert(this->_state > MatrixState::initialized);
 
-
+    		cout << "i=" << i << endl;
+    		cout << "j=" << j << endl;
+    		
+		return _Matrix[i][j];
+	}
 
 	////// View Function(s)
 
