@@ -6,18 +6,24 @@
 using namespace std;
 
 namespace SpMV {
+
+// Constructor
 template <class fp_type>
 SparseMatrix_ELL<fp_type>::SparseMatrix_ELL(const size_t nrows,
                                             const size_t ncols)
     : SparseMatrix<fp_type>::SparseMatrix(nrows, ncols) {
-  cout << "Hello from ELL Constructor" << endl;
+  cout << "Hello from SparseMatrix_ELL Constructor" << endl;
 }
 
+// Destructor
 template <class fp_type> SparseMatrix_ELL<fp_type>::~SparseMatrix_ELL() {
-  cout << "Hello from ELL Destructor" << endl;
-  this->_state = MatrixState::undefined;
+  cout << "Goodbye from SparseMatrix_ELL Destructor" << endl;
 }
 
+// Assemble placeholder
+template <class fp_type> void SparseMatrix_ELL<fp_type>::assemble() {
+  cout << "Hello from SparseMatrix_ELL assemble" << endl;
+}
 } // namespace SpMV
 // Need to declare the concrete templates within the library for
 // use in code that links to libspmv
