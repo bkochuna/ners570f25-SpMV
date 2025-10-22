@@ -1,41 +1,53 @@
 #include "SparseMatrix_DEN.hpp"
 
 #include <iostream>
-#include <stddef.h>
+#include <algorithm>
+#include <cassert>
 
-using namespace std;
 
 namespace SpMV
 {
+    //constractor copy from Ethan to align interface 
     template <class fp_type>
-    SparseMatrix_DEN<fp_type>::SparseMatrix_DEN(const size_t nrows, const size_t ncols) :  
-        SparseMatrix<fp_type>::SparseMatrix(nrows, ncols)   // use a linear storage
+    SparseMatrix_DEN<fp_type>::SparseMatrix_DEN(const size_t nrows, const size_t ncols)
+        : SparseMatrix<fp_type>::SparseMatrix(nrows, ncols)
     {
-        cout << "Hello from DEN Constructor" << endl;
+        std::cout << "Hello from SparseMatrix_DEN Constructor!" << std::endl;
+
+        // Allocate 2D dense matrix
+        _Matrix = std::make_unique<std::unique_ptr<fp_type[]>[]>(this->_nrows);
+        for (size_t i = 0; i < this->_nrows; ++i)
+        {
+            _Matrix[i] = std::make_unique<fp_type[]>(this->_ncols);
+            std::fill(_Matrix[i].get(), _Matrix[i].get() + this->_ncols, static_cast<fp_type>(0));
+        }
+
+        // Mark state as initialized
+        this->_state = MatrixState::initialized;
     }
+
+
+    template <class fp_type>
+    SparseMatrix_DEN<fp_type>::~SparseMatrix_DEN() {}
 
     template <class fp_type>
     void SparseMatrix_DEN<fp_type>::assemble()
     {
         cout << "Hello from DEN assemble" << endl;
-
-        //This routine needs to convert _buildCoeff into the COO storage format.
     }
+
+
+    // matvac from kunjian
     template <class fp_type>
-    std::vector<fp_type> SparseMatrix_DEN<fp_type>::matvec(const std::vector<fp_type>& x) const
-    {
-        // this is a temperary version of matvec
+    std::vector<fp_type> SparseMatrix_DEN<fp_type>::matvec(const std::vector<fp_type>& x) const{
         assert(this->_state == MatrixState::assembled);
         assert(x.size() == this->_ncols);
 
         std::vector<fp_type> y(this->_nrows, static_cast<fp_type>(0));
 
-        // Perform dense matrix-vector multiplication
-        for (size_t i = 0; i < this->_nrows; ++i)
-        {
-            for (size_t j = 0; j < this->_ncols; ++j)
-            {
-                y[i] += _data[i * this->_ncols + j] * x[j];
+        for (size_t i = 0; i < this->_nrows; ++i){
+            for (size_t j = 0; j < this->_ncols; ++j){
+                y[i] += _Matrix[i][j] * x[j];
             }
         }
 

@@ -2,23 +2,25 @@
 #define __SPMV_SparseMatrix_DEN__
 
 #include "SparseMatrix.hpp"
+#include <memory>
 #include <vector>
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
 namespace SpMV
 {
-    template <class fp_tpye>
+    template <class fp_type>
     class SparseMatrix_DEN : public SparseMatrix<fp_type>
     {
-        public: 
-            SparseMatrix_DEN(const size_t nrows, const size_t ncols);
-            ~SparseMatrix_Den();
+    private:
+        std::unique_ptr<std::unique_ptr<fp_type[]>[]> _Matrix;
 
-            void assemble() override;
-            std::vector<fp_type> matvec(const std::vector<fp_type>& x) const;
-        private:
-            std::vector<fp_type> _data;
+    public:
+        SparseMatrix_DEN(const size_t nrows, const size_t ncols);
+        ~SparseMatrix_DEN();
+
+        void assemble();
+        std::vector<fp_type> matvec(const std::vector<fp_type>& x) const;
     };
 }
 
