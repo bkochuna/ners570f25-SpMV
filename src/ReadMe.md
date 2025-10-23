@@ -10,6 +10,9 @@ Glow Blue
 # SparseMatrix_JDS Print and View Methods
 # ChatGPT Wrote This ReadMe
 ---
+**Please Note that at the time of writing this, I am in Oak Ridge for NERS 535 and in the lab 8 hours a day. I put in holder functions since when I wrote this the other JDS methods were not complete. I will replace them once they are done. I am busy all Thursday and Friday.**
+
+---
 
 **Method:**  
 `printJDSInputMatrixSummary() const`  
