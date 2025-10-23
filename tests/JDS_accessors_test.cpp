@@ -72,9 +72,7 @@ TEST_CASE(simple_accessors)
   ASSERT(MAT.get_perm()[3]==3);
   ASSERT(MAT.get_perm()[5]==1);
 
-  ASSERT(MAT.get_maxnz_row()[0]==3);
-  ASSERT(MAT.get_maxnz_row()[1]==2);
-  ASSERT(MAT.get_maxnz_row()[2]==1);
+  ASSERT(MAT.get_maxnz_row()==3);
 
 }
 
