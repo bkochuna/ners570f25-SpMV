@@ -3,6 +3,7 @@
 
 #include "SparseMatrix.hpp"
 #include <memory>
+#include <vector>
 
 namespace SpMV
 {
@@ -20,6 +21,7 @@ namespace SpMV
             void assemble() override;
             void assembleStorage();
             void disassembleStorage();
+            std::vector<fp_type> matvec(const std::vector<fp_type>& x) const;
     };
 
 }
