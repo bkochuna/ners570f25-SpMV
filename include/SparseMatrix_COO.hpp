@@ -13,8 +13,8 @@ namespace SpMV
     {
         protected: 
             std::vector<fp_type> aij;
-            std::vector<size_t> idx_col;
-            std::vector<size_t> idx_row;
+            std::vector<size_t> idx_row_;
+            std::vector<size_t> idx_col_;
 
         public:
             SparseMatrix_COO(const size_t nrows, const size_t ncols);
