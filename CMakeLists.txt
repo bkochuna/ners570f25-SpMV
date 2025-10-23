@@ -93,6 +93,8 @@ set(SPMV_SOURCES
   "src/SparseMatrix.cpp"
   "src/SparseMatrix_COO.cpp"
   "src/SparseMatrix_DEN.cpp"
+  "src/SparseMatrix_DEN.cpp"
+  
 )
 
 add_library(spmv SHARED ${SPMV_SOURCES})
