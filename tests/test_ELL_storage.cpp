@@ -44,6 +44,19 @@ TEST_CASE(test_ELL_storage_4by4)
                         ASSERT(mat.values()[idx] == 0.0);
                 }
         }
+
+        //now check disassembleStorage()
+        auto out = mat.disassembleStorage();
+
+        ASSERT(out.i.size() == out.j.size());
+        ASSERT(out.i.size() == out.val.size());
+        ASSERT(out.i.size() == i_idx.size());
+
+        for (size_t k = 0; k < i_idx.size(); ++k) {
+                ASSERT(out.i[k] == i_idx[k]);
+                ASSERT(out.j[k] == j_idx[k]);
+                ASSERT(out.val[k] == vals[k]);
+        }
 }
 
 
@@ -85,6 +98,19 @@ TEST_CASE(test_ELL_storage_8by8)
                         ASSERT(mat.values()[idx] == 0.0);
                 }
         }
+
+        //now check disassembleStorage()
+        auto out = mat.disassembleStorage();
+
+        ASSERT(out.i.size() == out.j.size());
+        ASSERT(out.i.size() == out.val.size());
+        ASSERT(out.i.size() == i_idx.size());
+
+        for (size_t k = 0; k < i_idx.size(); ++k) {
+                ASSERT(out.i[k] == i_idx[k]);
+                ASSERT(out.j[k] == j_idx[k]);
+                ASSERT(out.val[k] == vals[k]);
+        }
 }
 
 TEST_CASE(test_ELL_storage_16by16)
@@ -124,6 +150,19 @@ TEST_CASE(test_ELL_storage_16by16)
                 if (mat.colIdx()[idx] == std::numeric_limits<size_t>::max()) {
                         ASSERT(mat.values()[idx] == 0.0);
                 }
+        }
+
+        //now check disassembleStorage()
+        auto out = mat.disassembleStorage();
+
+        ASSERT(out.i.size() == out.j.size());
+        ASSERT(out.i.size() == out.val.size());
+        ASSERT(out.i.size() == i_idx.size());
+
+        for (size_t k = 0; k < i_idx.size(); ++k) {
+                ASSERT(out.i[k] == i_idx[k]);
+                ASSERT(out.j[k] == j_idx[k]);
+                ASSERT(out.val[k] == vals[k]);
         }
 }
 
