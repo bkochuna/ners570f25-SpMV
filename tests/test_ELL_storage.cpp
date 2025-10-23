@@ -26,15 +26,26 @@ TEST_CASE(test_ELL_storage_4by4)
 
 	//expected size?
 	size_t expected_size = mat.nrows() * mat.maxEntriesPerRow();
-	
 	ASSERT(mat.colIdx().size() == expected_size);
 	ASSERT(mat.values().size() == expected_size);
 
-	//check zero padding
-	for (size_t idx = 0; idx < mat.colIdx().size(); ++idx) {
-		ASSERT(mat.colIdx()[idx] != std::numeric_limits<size_t>::max() || mat.values()[idx] == 0);
-	}
+	//check equality
+        std::vector<size_t> expected_colIdx = {0, 0, 1, 0, 1, 1, 2, 2, std::numeric_limits<size_t>::max(), 2, 3, 3 };
+	std::vector<double> expected_vals = {1, 3, 6, 9, 2, 4, 7, 10, 0, 5, 8, 11};
+
+        for (size_t idx = 0; idx < expected_size; ++idx) {
+                ASSERT(mat.colIdx()[idx] == expected_colIdx[idx]);
+                ASSERT(mat.values()[idx] == expected_vals[idx]);
+        }
+
+        // check zero padding
+        for (size_t idx = 0; idx < expected_size; ++idx) {
+                if (mat.colIdx()[idx] == std::numeric_limits<size_t>::max()) {
+                        ASSERT(mat.values()[idx] == 0.0);
+                }
+        }
 }
+
 
 TEST_CASE(test_ELL_storage_8by8)
 {
@@ -59,9 +70,20 @@ TEST_CASE(test_ELL_storage_8by8)
         ASSERT(mat.colIdx().size() == expected_size);
         ASSERT(mat.values().size() == expected_size);
 
-        //check zero padding
-        for (size_t idx = 0; idx < mat.colIdx().size(); ++idx) {
-                ASSERT(mat.colIdx()[idx] != std::numeric_limits<size_t>::max() || mat.values()[idx] == 0);
+        //check equality
+        std::vector<size_t> expected_colIdx = {0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 5, 3, 6, 7, 6, 7, std::numeric_limits<size_t>::max(), 4, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max()};
+        std::vector<double> expected_vals = {1, 3, 6, 8, 10, 12, 14, 16, 2, 4, 7, 9, 11, 13, 15, 17, 0, 5, 0, 0, 0, 0, 0, 0};
+
+        for (size_t idx = 0; idx < expected_size; ++idx) {
+                ASSERT(mat.colIdx()[idx] == expected_colIdx[idx]);
+                ASSERT(mat.values()[idx] == expected_vals[idx]);
+        }
+
+        // check zero padding
+        for (size_t idx = 0; idx < expected_size; ++idx) {
+                if (mat.colIdx()[idx] == std::numeric_limits<size_t>::max()) {
+                        ASSERT(mat.values()[idx] == 0.0);
+                }
         }
 }
 
@@ -88,9 +110,20 @@ TEST_CASE(test_ELL_storage_16by16)
         ASSERT(mat.colIdx().size() == expected_size);
         ASSERT(mat.values().size() == expected_size);
 
-        //check zero padding
-        for (size_t idx = 0; idx < mat.colIdx().size(); ++idx) {
-                ASSERT(mat.colIdx()[idx] != std::numeric_limits<size_t>::max() || mat.values()[idx] == 0);
+        //check equality
+        std::vector<size_t> expected_colIdx = {0, 1, 5, 0, 1, 2, 0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 3, 4, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max(), 6, 7, 6, 7, 8, 10, 10, std::numeric_limits<size_t>::max()};
+        std::vector<double> expected_vals = {1, 3, 6, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 32, 2, 4, 0, 0, 10, 12, 14, 16, 18, 20, 22, 0};
+
+        for (size_t idx = 0; idx < expected_size; ++idx) {
+                ASSERT(mat.colIdx()[idx] == expected_colIdx[idx]);
+                ASSERT(mat.values()[idx] == expected_vals[idx]);
+        }
+
+        // check zero padding
+        for (size_t idx = 0; idx < expected_size; ++idx) {
+                if (mat.colIdx()[idx] == std::numeric_limits<size_t>::max()) {
+                        ASSERT(mat.values()[idx] == 0.0);
+                }
         }
 }
 
