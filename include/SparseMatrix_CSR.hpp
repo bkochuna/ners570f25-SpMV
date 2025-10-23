@@ -37,7 +37,7 @@ public:
     // Build CSR arrays from collected triplets; sum duplicates.
     // Preconditions: state == Building
     // Postconditions: _ia.size()==nrows+1; _ia[0]==0; _ia[nrows]==nnz; state==Assembled; builder cleared.
-    void assembleStorage();
+    void assemble();
 
     // Restore builder triplets from CSR arrays and free CSR storage.
     // Preconditions: state == Assembled
