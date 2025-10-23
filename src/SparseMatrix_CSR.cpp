@@ -7,9 +7,11 @@ namespace SpMV
     template <class fp_type>
     vector<vector<double>> SparseMatrix_CSR_Tests<fp_type>::openMatrixFile(const string &filename)
     {
+        // Open the matrix file 
         ifstream file(filename);
         vector<vector<double>> my_arr;
 
+        //If the file is open, read the matrix data
         if (file.is_open())
         {
             string line;
@@ -17,7 +19,6 @@ namespace SpMV
             int r, c;
             double val;
 
-            // Skip header lines
             while (getline(file, line))
             {
                 if (line.empty() || line[0] == '%')
@@ -77,14 +78,17 @@ namespace SpMV
     template <class fp_type>
     bool SparseMatrix_CSR_Tests<fp_type>::compareVectors(const vector<double> &v1, const vector<double> &v2)
     {
+        // Compare vector sizes
         if (v1.size() != v2.size())
         {
             cerr << "Vector size mismatch: " << v1.size() << " vs " << v2.size() <<endl;
             return false;
         }
 
+        // Compare vector elements
         for (size_t i = 0; i < v1.size(); ++i)
         {
+            //if not in tolerance, break
             if (abs(v1[i] - v2[i]) > 1e-10)
             {
                 cerr << "Mismatch at index " << i << ": " << v1[i] << " vs " << v2[i] << endl;
@@ -105,14 +109,17 @@ namespace SpMV
         auto csrMatrix = csr.getMatrix(); //Assuming this is the getter method
         auto matrix = SparseMatrix_CSR_Tests<fp_type>::openMatrixFile(matrixFile);
 
+        //check if same size
         if (csrMatrix.size() != matrix.size())
         {
             cerr << "[ERROR] Matrix " << matrixFile << " row size mismatch" << endl;
             return false;
         }
 
+        //check each element
         for (size_t i = 0; i < matrix.size(); ++i)
         {
+            //check if same size before checking each element
             if (csrMatrix[i].size() != matrix[i].size())
             {
                 cerr << "[ERROR] Matrix " << matrixFile << " column size mismatch in row " << i << endl;
@@ -122,6 +129,7 @@ namespace SpMV
             for (size_t j = 0; j < matrix[i].size(); ++j)
             {
 
+                //if not is tolerance, break
                 if (abs(csrMatrix[i][j] - denseMatrix[i][j]) > 1e-10)
                 {
                     cerr << "[ERROR] Matrix " << matrixFile << " mismatch at (" << i << ", " << j << "): "
@@ -135,16 +143,19 @@ namespace SpMV
         auto csrVec = csr.getVector(); //assuming this is the getter method
         auto vecIn = SparseMatrix_CSR_Tests<fp_type>::openVectorFile(vecInFile);
 
+        // Compare input vectors
         if (!compareVectors(csrVec, vecIn))
         {
             cerr << "[ERROR] Input vector " << vecInFile << " mismatch" << endl;
             return false;
         }
 
+        // Compute the result vector
         csr.compute();
         auto csrResult = csr.getResult();
         auto realResult = SparseMatrix_CSR_Tests<fp_type>::openVectorFile(vecOutFile);
 
+        // Compare result vectors
         if (!compareVectors(csrResult, realResult))
         {
             cerr << "[ERROR] Result vector mismatch for " << vecOutFile << endl;
@@ -159,19 +170,24 @@ namespace SpMV
     bool SparseMatrix_CSR_Tests<fp_type>::runTests()
     {
         namespace fs = filesystem;
+        //get the current path
         fs::path basePath = fs::current_path();
 
+        //name of the test matrices
         vector<string> names = {"fs_183_1", "impcol_e", "lns_3937", "nnc666", "s1rmq4m1"};
         bool passed = true;
 
         for (const auto &n : names)
         {
+            //set file paths
             string matrixFile = (basePath / "mats" / (n + ".mtx")).string();
             string vecInFile = (basePath / "vecs" / (n + ".vecin")).string();
             string vecOutFile = (basePath / "vecs" / (n + ".vecout")).string();
 
+            //check if passed
             bool passed = testAccessors(matrixFile, vecInFile, vecOutFile);
 
+            //if did not pass, break
             if (!passed)
             {
                 cerr << "[FAIL] Test failed for matrix: " << matrixFile << endl;
@@ -180,6 +196,7 @@ namespace SpMV
             }
         }
 
+        // Final result
         if (passed)
             cout << "All CSR accessor tests passed" << endl;
         else
