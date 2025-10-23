@@ -1,6 +1,8 @@
 #ifndef __SPMV_SparseMatrix_COO__
 #define __SPMV_SparseMatrix_COO__
 
+#include <iostream>
+#include <stddef.h>
 #include "SparseMatrix.hpp"
 
 namespace SpMV
