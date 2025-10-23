@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stddef.h>
 
-#include "SparseMatrix_CSR.hpp" // To help build the ELL from CSR
+#include "SparseMatrix_CSR.hpp" // To help assamble the ELL from CSR
 #include "SparseMatrix_ELL.hpp"
 
 using namespace std;
@@ -37,13 +37,15 @@ void SparseMatrix_ELL<fp_type>::assembleStorage(
 
   // Create a temporary CSR matrix
   SparseMatrix_CSR csr;
-  csr.assemble(nrows, ncols, val); // TO CONFIRM: PARAMETERS IN CSR ASSAMBLE FUNCTION
+  csr.assemble(i_idx, j_idx, vals, nrows, ncols); // TO CONFIRM: PARAMETERS IN CSR ASSAMBLE FUNCTION
 
   // Use CSR to build the ELL storage
 
-  _nrows = csr.rows(); // TO CONFIRM: PARAMETERS IN CSR CLASS
-  _ncols = csr.cols(); // TO CONFIRM: PARAMETERS IN CSR CLASS
+  // Copy dimensions
+  _nrows = csr.rows();  // TO CONFIRM: accessor names
+  _ncols = csr.cols();  // TO CONFIRM: accessor names
 
+  // Access CSR storage
   const auto& rowPtr = csr.rowPtr(); // TO CONFIRM: PARAMETERS IN CSR CLASS
   const auto& csrColIdx = csr.colIdx(); // TO CONFIRM: PARAMETERS IN CSR CLASS
   const auto& csrVals = csr.values(); // TO CONFIRM: PARAMETERS IN CSR CLASS
@@ -55,26 +57,66 @@ void SparseMatrix_ELL<fp_type>::assembleStorage(
         _maxEntriesPerRow = std::max(_maxEntriesPerRow, rowLen);
   }
   
-  //// Resize internal arrays
+  // Allocate ELL storage (Resize internal arrays)
   _colIdx.assign(_nrows * _maxEntriesPerRow, std::numeric_limits<size_t>::max());
   _values.assign(_nrows * _maxEntriesPerRow, fp_type(0));
 
-  // Fill them row by row
-for (size_t row = 0; row < _nrows; ++row) {
+  // Fill ELL (column-major ELLPACK layout)
+  for (size_t row = 0; row < _nrows; ++row) {
         size_t start = rowPtr[row];
         size_t end   = rowPtr[row + 1];
         for (size_t k = 0; k < end - start; ++k) {
-            // ELL column-major layout: each "column" corresponds to the k-th nonzero of each row
-            size_t idx = k * _nrows + row;
+            size_t idx = k * _nrows + row;     // (colMajor)
             _colIdx[idx] = csrColIdx[start + k];
             _values[idx] = csrVals[start + k];
         }
     }
-}
-
-
 
 }
+
+//Disassemble:
+template <class fp_type>
+DisassembledData SparseMatrix_ELL<fp_type>::disassembleStorage() const
+{
+  DisassembledData out;
+
+  out.nrows = _nrows;
+  out.ncols = _ncols;
+
+  // Count number of non-zeros first (optional but avoids reallocation)
+  size_t nnz = 0;
+  for (size_t r = 0; r < _nrows; ++r) {
+      for (size_t k = 0; k < _maxEntriesPerRow; ++k) {
+          size_t idx = k * _nrows + r;
+          if (_values[idx] != fp_type(0)) {
+                ++nnz;
+          }
+      }
+  }
+
+  out.i.reserve(nnz);
+  out.j.reserve(nnz);
+  out.val.reserve(nnz);
+
+  // Extract COO triplets directly from ELL
+  for (size_t r = 0; r < _nrows; ++r) {
+      for (size_t k = 0; k < _maxEntriesPerRow; ++k) {
+            size_t idx = k * _nrows + r;
+            size_t c = _colIdx[idx];
+            fp_type v = _values[idx];
+
+            if (v != fp_type(0)) {
+                out.i.push_back(r);
+                out.j.push_back(c);
+                out.val.push_back(v);
+            }
+      }
+  }
+
+  return out;
+  
+}
+
 
 
 
