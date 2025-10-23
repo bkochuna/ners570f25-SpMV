@@ -52,7 +52,12 @@ namespace SpMV
 		cout << "j=" << j << endl;
 
 		if (this->_state == MatrixState::building) {
-			return _buildCoeff[i][j]; }
+			auto found = this->_buildCoeff.find({i, j});
+			if (found != this->_buildCoeff.end()){
+				return found->second;}
+			else {
+				return _Matrix[i][j]; }
+		}
 		else {
 			return _Matrix[i][j]; }
 	}
