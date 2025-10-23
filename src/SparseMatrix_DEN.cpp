@@ -42,39 +42,22 @@ namespace SpMV
 	}
 
 
-	////// Accessor Function(s)
+	////// Accessor Function
 	template <class fp_type>
 	fp_type SparseMatrix_DEN<fp_type>::getValue(const size_t i, const size_t j)
 	{
-		assert(this->_state > MatrixState::initialized);
-		
-		cout << "i=" << i << endl;
-		cout << "j=" << j << endl;
-		
-		return _Matrix[i][j];
-	}
-
-
-	template <class fp_type>
-	void SparseMatrix_DEN<fp_type>::setValue(const size_t i, const size_t j, fp_type val)
-	{
 		assert(this->_state >= MatrixState::initialized);
-		assert(i < this->_nrows);
-		assert(j < this->_ncols);
-		
-		this->_state = MatrixState::building;
-		
-		//Store value
-		_Matrix[i][j] = val;
 		
 		cout << "i=" << i << endl;
 		cout << "j=" << j << endl;
-		cout << "val=" << val << endl;
-		
-		assert(this->_state == MatrixState::building);
+
+		if (this->_state == MatrixState::building) {
+			return _buildCoeff[i][j]; }
+		else {
+			return _Matrix[i][j]; }
 	}
 
-        ////// View Function(s)
+    ////// View Function(s)
 
 
 
