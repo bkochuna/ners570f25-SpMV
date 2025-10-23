@@ -24,32 +24,10 @@ namespace SpMV
 
     template <class fp_type>
     void SparseMatrix_COO<fp_type>::setValue(const size_t i, const size_t j, fp_type val) :
-        //SparseMatrix<fp_type>::setValue(i, j, val)
-    {
-        cout << "Hello from COO setValue" << endl;
-        
-        assert(i < this->_nrow);
-        assert(j < this->_ncol);
-        assert(this->_state == MatrixState::assembled);
-
-        this->_state = MatrixState::initialized;
-        
-        // Check if the i,j are present in _buildCoeff
-        // if yes, replace
-        // if not, add
-        // afterwards, reassemble
-        // Actually this all could be replaced with a call to 
-        // SparseMatrix<fp_type>::setValue(i, j, val)
-        auto it = this->_buildCoeff.find(std::make_pair(i,j));
-        if (it != this->_buildCoeff.end()) {
-            it->second = val;
-        } else {
-            this->_buildCoeff[std::make_pair(i,j)] = val;
-        }
-        // Re-assemble the matrix
-        assemble();
-        assert(this->_state == MatrixState::assembled);
-    }
+        SparseMatrix<fp_type>::setValue(i, j, val)
+    // {
+    //     cout << "Hello from COO setValue" << endl;
+    // }
 
     template <class fp_type>
     fp_type SparseMatrix_COO<fp_type>::getValue(const size_t i, const size_t j) :
