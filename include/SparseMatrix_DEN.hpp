@@ -17,8 +17,7 @@ namespace SpMV
             SparseMatrix_DEN(const size_t nrows, const size_t ncols); // Constructor
             ~SparseMatrix_DEN(); // Destructor
             void assemble();//Accesor Methods
-	    fp_type getValue(const size_t i, const size_t j);
-	    void setValue(const size_t i, const size_t j, fp_type val);
+	        fp_type getValue(const size_t i, const size_t j);
     };
 
 }
