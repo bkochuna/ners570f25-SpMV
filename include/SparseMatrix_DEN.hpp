@@ -21,6 +21,7 @@ namespace SpMV
             void assemble() override;
             void assembleStorage();
             void disassembleStorage();
+            fp_type getValue(const size_t i, const size_t j);
             std::vector<fp_type> matvec(const std::vector<fp_type>& x) const;
     };
 

@@ -79,11 +79,27 @@ namespace SpMV
     }
 
 
-	////// Accessor Function(s)
+	////// Accessor Function
+	template <class fp_type>
+	fp_type SparseMatrix_DEN<fp_type>::getValue(const size_t i, const size_t j)
+	{
+		assert(this->_state >= MatrixState::initialized);
+		
+		cout << "i=" << i << endl;
+		cout << "j=" << j << endl;
 
+		if (this->_state == MatrixState::building) {
+			auto found = this->_buildCoeff.find({i, j});
+			if (found != this->_buildCoeff.end()){
+				return found->second;}
+			else {
+				return _Matrix[i][j]; }
+		}
+		else {
+			return _Matrix[i][j]; }
+	}
 
-
-	////// View Function(s)
+    ////// View Function(s)
 
 
 
