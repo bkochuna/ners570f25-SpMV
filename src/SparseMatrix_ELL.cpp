@@ -2,6 +2,9 @@
 
 #include <iostream>
 #include <stddef.h>
+#include <iomanip>
+#include <cmath>
+#include <vector>
 
 using namespace std;
 
@@ -27,57 +30,41 @@ template <class fp_type> void SparseMatrix_ELL<fp_type>::assemble() {
 
 // View Method
 template <class fp_type> void SparseMatrix_ELL<fp_type>::viewMat() {
-  // Unsure how all these functions will be named: getELLMatrix(), get_values(), getELLMatrix(), get_colIndices()
-  auto ELLmat = this->getELLMatrix(); // unsure how this will be stored during implementation
-  double* mat = new double[nrows*ncols]();
-  int col, maxDig;
-  maxDig = 0;
-  for (int i=0;i<ELLmat.nrows;i++){ // restructure as an ij grid for printing
-      for (int j=0;j<ELLmat._maxNnzPerRow;j++) {
-          col = ELLmat.get_colIndices(i*ELLmat._maxNnzPerRow+j);
-          mat[i*ELLmat.ncols+col] = ELLmat.get_values(i*ELLmat._maxNnzPerRow+j);
-          if ((log10(ELLmat.get_values(i*ELLmat._maxNnzPerRow+j)))> (log10(maxDig))) {
-              maxDig = static_cast<int>(log10(ELLmat.get_values(i*ELLmat._maxNnzPerRow+j)));
-          }
-      }
-  }
-  maxDig = maxDig+1;
-  cout << "A=[";
-  int numDig; 
-  for (int i=0;i<ELLmat.nrows;i++) {
-      for (int j=0;j<ELLmat.ncols;j++) {
-          if (ELLmat.get_colIndices(i*ELLmat._maxNnzPerRow+j)  == -1) { // padding value is -1
-              numDig = 1;
-          }
-          else {
-              numDig = static_cast<int>(log10(mat[i*ELLmat._maxNnzPerRow+j]))+1;
-          }
-          
-          if (numDig<maxDig){
-              for (int x=numDig;x<maxDig;x++){
-                  cout << " ";
-              }
-          }
-          if (ELLmat.get_colIndices(i*ELLmat._maxNnzPerRow+j)  == -1) {
-              cout << "0.00";
-          }
-          else {
-              cout << fixed << setprecision(2) << mat[i*ELLmat._maxNnzPerRow+j];
-          }
+  const int nrows = this->getNumRows();
+  const int ncols = this->getNumCols();
+  const int maxNnz = this->getmaxNNZPerRow();
+  const auto& values = this->values;
+  const auto& colInd = this->colIndices;
+  std::vector<fp_type> mat(nrows * ncols, 0.0);
+  int maxDig = 1;
 
-          if (i<ELLmat.ncols-1){
-              cout << " ";
+  for (int i=0;i<nrows;i++){ // restructure as an ij grid for printing
+      for (int j=0;j<maxNnz;j++) {
+          int col = colInd[i*maxNnz+j];
+          if (col != -1) {
+            mat[i*ncols+col] = values[i*maxNnz+j];
+            if ((floor(log10(abs(values[i*maxNnz+j]))))+1> (log10(maxDig))) {
+              maxDig = static_cast<int>(floor(log10(abs(values[i*maxNnz+j])))+1);
+            }
           }
       }
-      if (i==ELLmat.nrows-1){
-          cout << "]" << endl;
-          return;
-      }
-      cout << "" << endl;
-      cout << "   ";
   }
-                    
+  cout << fixed << setprecision(8); // will print only 8 decimal places for viewing, but can change as desired
+  int printWidth = (2+maxDig) + (8); // prints separator space before longest whole number plus decimal dot, plus number of decimals (change corresponding to value above)
+  cout << "A=[ \n";
+  for (int i=0;i<nrows;i++) {
+    for (int j=0;j<ncols;j++) {
+        cout << setw(printWidth) << mat[i*ncols+j];
     }
+    if (i==nrows-1){
+        cout << "]" << endl;
+        return;
+    }
+    else {
+        cout << "\n";
+    }
+  }
+}
 } // namespace SpMV
 // Need to declare the concrete templates within the library for
 // use in code that links to libspmv
