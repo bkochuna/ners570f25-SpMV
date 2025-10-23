@@ -1,0 +1,3 @@
+A, 1, 4, 1, DEN
+I Index, J Index, Value
+0,       2,       3.
