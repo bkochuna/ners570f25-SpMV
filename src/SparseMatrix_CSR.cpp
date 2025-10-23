@@ -1,15 +1,11 @@
 #include "SparseMatrix_CSR.hpp"
 #include <algorithm>     // optional
 #include <limits>
-#include <iostream>
-#include <stdexcept>
-
-using namespace std;
 
 namespace SpMV {
 
 template <class fp_type>
-void SparseMatrix_CSR<fp_type>::assemble()
+void SparseMatrix_CSR<fp_type>::assembleStorage()
 {
     if (_state != State::Building)
         throw std::logic_error("assembleStorage(): state must be Building");
