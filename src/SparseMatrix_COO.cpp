@@ -7,11 +7,6 @@ using namespace std;
 
 namespace SpMV
 {
-    // template <class fp_type>
-    // void SparseMatrix_COO<fp_type>::assemble()
-    // {
-    //     cout << "Hello from COO Constructor" << endl;
-    // }
 
     template <class fp_type>
     void SparseMatrix_COO<fp_type>::assemble()
