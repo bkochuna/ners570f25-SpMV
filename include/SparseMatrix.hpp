@@ -31,6 +31,16 @@ namespace SpMV
         void    setValue(const size_t i, const size_t j, fp_type val);
         fp_type getValue(const size_t i, const size_t j);
         virtual void assemble() =0; // The "=0" defines this class as abstract
+
+
+        
+        // Getters for testing
+        size_t nrows() const { return _nrows; }
+        size_t ncols() const { return _ncols; }
+        size_t numnz() const { return _numnz; }
+        MatrixState getState() const { return _state; }
+        bool buildCoeffEmpty() const { return _buildCoeff.empty(); }
+        size_t buildCoeffSize() const { return _buildCoeff.size(); }
     };
 }
 
