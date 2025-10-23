@@ -5,7 +5,7 @@
 namespace SpMV {
 
 template <class fp_type>
-void SparseMatrix_CSR<fp_type>::assembleStorage()
+void SparseMatrix_CSR<fp_type>::assemble()
 {
     if (_state != State::Building)
         throw std::logic_error("assembleStorage(): state must be Building");
