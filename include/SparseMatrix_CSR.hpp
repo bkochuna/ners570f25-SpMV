@@ -1,18 +1,27 @@
-#ifndef __SPMV_SparseMatrix_CSR__
-#define __SPMV_SparseMatrix_CSR__
+#ifndef __SPMV_SparseMatrix_CSR_Tests__
+#define __SPMV_SparseMatrix_CSR_Tests__
 
-#include "SparseMatrix.hpp"
+#include "SparseMatrix_CSR.hpp"
+#include <fstream>
+#include <sstream>
+#include <cmath>
 #include <iostream>
+#include <string>
+#include <vector>
+#include <filesystem>
+
 
 namespace SpMV
 {
     template <class fp_type>
-    class SparseMatrix_CSR : public SparseMatrix<fp_type>
+    class SparseMatrix_CSR_Tests
     {
-        public:
-            printCSRToCounsole();
-            printCSRElementToConsole(const size_t row, const size_t column);
-            printCSRToLogFile(const std::string& filename);
+    public:
+        bool runTests();
+        bool testAccessors(const std::string &matrixFile, const std::string &vecInFile, const std::string &vecOutFile);
+        bool compareVectors(const std::vector<double> &v1, const std::vector<double> &v2);
+        std::vector<double> openVectorFile(const std::string &filename);
+        std::vector<std::vector<double>> openMatrixFile(const std::string &filename);
     };
 }
 
