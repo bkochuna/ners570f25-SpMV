@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.20)
 
 project(SpMV VERSION 0.1.0 LANGUAGES CXX)
 
-
 #===============================================================================
 # Basic CMake configuration
 #===============================================================================
@@ -43,25 +42,15 @@ endif()
 #===============================================================================
 # Compiler flags
 #===============================================================================
-
-# A macro to check if a compiler flag is supported (provided by CMake)
-# https://cmake.org/cmake/help/latest/module/CheckCXXCompilerFlag.html
 include(CheckCXXCompilerFlag)
-
-# A macro to check if a compiler flag is supported, and if so, add it
-# to the C++ compiler flags
 macro(spmv_add_cxx_compiler_flag FLAG)
-  # SFLAG is the flag without the hyphen, e.g., "-Wall" -> "Wall"
   string(REGEX REPLACE "-" "" SFLAG ${FLAG})
-  # Check if the compiler supports the flag
   check_cxx_compiler_flag(${FLAG} COMPILER_SUPPORT_${SFLAG})
-  # If the compiler supports the flag, add it to the C++ compiler flags
   if(COMPILER_SUPPORT_${SFLAG})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAG}")
   endif()
 endmacro()
 
-# Set warning flags
 spmv_add_cxx_compiler_flag("-Wall")
 spmv_add_cxx_compiler_flag("-Wextra")
 spmv_add_cxx_compiler_flag("-Wcast-align")
@@ -87,11 +76,10 @@ spmv_add_cxx_compiler_flag("-pedantic")
 #===============================================================================
 # Create the library
 #===============================================================================
-
-# Source files
 set(SPMV_SOURCES
   "src/SparseMatrix.cpp"
   "src/SparseMatrix_COO.cpp"
+  "src/SparseMatrix_ELL.cpp"
 )
 
 add_library(spmv SHARED ${SPMV_SOURCES})
@@ -103,13 +91,10 @@ target_include_directories(spmv
 )
 
 #===============================================================================
-# Other directories
+# Subdirectories
 #===============================================================================
-
-# Enable testing
 include(CTest)
 enable_testing()
-add_subdirectory(tests)
 
-# Add examples
+add_subdirectory(tests)
 add_subdirectory(examples)
