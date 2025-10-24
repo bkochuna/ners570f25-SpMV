@@ -108,6 +108,8 @@ target_include_directories(spmv
 #===============================================================================
 
 # Enable testing
+# CSR matvec test
+
 include(CTest)
 enable_testing()
 add_subdirectory(tests)
