@@ -34,6 +34,14 @@ namespace SpMV
                          const std::vector<size_t>& J,
                          const std::vector<fp_type>& V);
 
+            void assemble() override;
+
+            const std::vector<size_t>& rowPtr() const noexcept; // expose raw CSR offsets for validation
+            const std::vector<size_t>& colInd() const noexcept; // expose column indices for test inspection
+            const std::vector<fp_type>& values() const noexcept; // expose stored coefficients for tests
+            size_t rows() const noexcept;                        // relay base matrix dimensions
+            size_t cols() const noexcept;
+
         private:
             // Task: decide on CSR attributes (m,n are in base; CSR owns these)
             std::vector<size_t>  _rowPtr;   // length = m+1
