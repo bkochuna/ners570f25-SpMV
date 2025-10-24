@@ -2,6 +2,8 @@
 #define __SPMV_SparseMatrix_ELL__
 
 #include "SparseMatrix.hpp"
+#include "SparseMatrix_CSR.hpp"
+
 #include <vector>
 
 namespace SpMV {
@@ -15,7 +17,25 @@ protected:
 public:
   SparseMatrix_ELL(const size_t nrows, const size_t ncols);
   ~SparseMatrix_ELL();
-  void assemble();
+  void assembleStorage(
+    const std::vector<size_t>& i_idx,
+    const std::vector<size_t>& j_idx,
+    const std::vector<fp_type>& vals,
+    size_t nrows,
+    size_t ncols
+  );
+
+  struct DisassembledData {
+        std::vector<size_t> i;    // row indices of non-zeros
+        std::vector<size_t> j;    // column indices of non-zeros
+        std::vector<fp_type> val; // values of non-zeros
+        size_t nrows = 0;
+        size_t ncols = 0;
+    };
+
+  DisassembledData disassembleStorage() const;
+
+    
 };
 } // namespace SpMV
 
