@@ -1,6 +1,7 @@
 #include "SparseMatrix_ELL.hpp"
 
 #include <iostream>
+#include <stdexcept>
 #include <stddef.h>
 
 using namespace std;
@@ -23,6 +24,43 @@ template <class fp_type> SparseMatrix_ELL<fp_type>::~SparseMatrix_ELL() {
 // Assemble placeholder
 template <class fp_type> void SparseMatrix_ELL<fp_type>::assemble() {
   cout << "Hello from SparseMatrix_ELL assemble" << endl;
+}
+
+// Perform a matrix-vector multiply using the stored ELL data layout.
+template <class fp_type>
+std::vector<fp_type>
+SparseMatrix_ELL<fp_type>::matvec(const std::vector<fp_type> &x) const {
+  if (this->_state != MatrixState::assembled) {
+    throw runtime_error("SparseMatrix_ELL::matvec requires an assembled matrix");
+  }
+  if (x.size() != this->_ncols) {
+    throw runtime_error("SparseMatrix_ELL::matvec received vector with incompatible length");
+  }
+
+  std::vector<fp_type> y(this->_nrows, fp_type{});
+  if (this->_nrows == 0 || _maxEntriesPerRow == 0) {
+    return y;
+  }
+  if (_values.size() != this->_nrows * _maxEntriesPerRow ||
+      _colIdx.size() != _values.size()) {
+    throw runtime_error("SparseMatrix_ELL::matvec storage is inconsistent");
+  }
+
+  for (std::size_t row = 0; row < this->_nrows; ++row) {
+    const std::size_t base = row * _maxEntriesPerRow;
+    for (std::size_t idx = 0; idx < _maxEntriesPerRow; ++idx) {
+      const std::size_t col = _colIdx[base + idx];
+      if (col == this->_ncols) {
+        continue; // padded slot
+      }
+      if (col > this->_ncols) {
+        throw runtime_error("SparseMatrix_ELL::matvec encountered column index out of bounds");
+      }
+      y[row] += _values[base + idx] * x[col];
+    }
+  }
+
+  return y;
 }
 } // namespace SpMV
 // Need to declare the concrete templates within the library for
