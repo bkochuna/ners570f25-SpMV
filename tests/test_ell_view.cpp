@@ -1,116 +1,130 @@
 #include <SpMV.hpp>
-
-#include <vector> // std::vector
-
-// Testing library required for testing (Always include this last!)
+#include "SparseMatrix_ELL.hpp"
+#include <vector>
+#include <algorithm>
+#include <cmath>
 #include "unit_test_framework.hpp"
 
-// Use ASSERT(condition) to test if a condition is true.
-// Direct comparison of floating point numbers is not recommended, so we define
-// ASSERT_NEAR(a, b, epsilon) to test if a and b are within epsilon of each
-// other.
+namespace {
+constexpr double EPS = 1e-12;
 
-// Create a unit test
-TEST_CASE(compareVectors) 
+struct Entry {
+  int c;
+  double v;
+};
+
+// Collect (col,val) entries for row r, ignoring padded slots (e.g., col == -1)
+static std::vector<Entry>
+row_entries(const std::vector<int>& cols, const std::vector<double>& vals,
+            size_t r, size_t K)
 {
-
-  // Initialize variables for testing
-  std::vector<int> const a = {1, 2, 3};
-  std::vector<int> const b = {1, 2, 3};
-
-  // Test that the elements are equal
-  for (size_t i = 0; i < a.size(); ++i) {
-    ASSERT(a[i] == b[i]); 
+  std::vector<Entry> out;
+  out.reserve(K);
+  for (size_t t = 0; t < K; ++t) {
+    const size_t idx = r * K + t;
+    const int c = cols[idx];
+    if (c >= 0) { // ignore padding
+      out.push_back({c, vals[idx]});
+    }
   }
-  
-  // Repeat for floating point numbers
-  std::vector<double> x = {1, 2, 3};
-  std::vector<double> y = {1, 2, 3.00001};
+  // sort by column to compare deterministically
+  std::sort(out.begin(), out.end(), [](const Entry& a, const Entry& b){
+    return a.c < b.c;
+  });
+  return out;
+}
 
-  // One should avoid floating point equality comparisons due to rounding errors
-  // We will briefly turn off compiler warnings about this to demonstrate why
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wfloat-equal"
-  //
-  // In ℝ (real numbers), 0.1 + 0.2 == 0.3
-  // However, in finite precision binary arithmetic, 0.1 + 0.2 != 0.3
-  // In binary 0.1 is an irrational number, hence in finite precision it is
-  // truncated, incuring a rounding error.
-  ASSERT(0.1 + 0.2 != 0.3); // Will evaluate to true if 0.1 + 0.2 != 0.3
-#pragma GCC diagnostic pop
-
-  // Instead, we can test if the numbers are within a small epsilon of each
-  // other
-  for (size_t i = 0; i < x.size(); ++i) {
-    ASSERT_NEAR(x[i], y[i], 1e-3); 
+// Compare two (col,val) lists after sorting by col; values compared with EPS
+static void assert_same_entries(const std::vector<Entry>& got,
+                                const std::vector<Entry>& exp)
+{
+  ASSERT(got.size() == exp.size());
+  for (size_t k = 0; k < got.size(); ++k) {
+    ASSERT(got[k].c == exp[k].c);
+    ASSERT(std::fabs(got[k].v - exp[k].v) <= EPS);
   }
-} // compareVectors
+}
+} // namespace
 
-// Create a test suite
-TEST_SUITE(my_suite) 
+TEST_CASE(ell_view_shape_and_content_flat)
 {
-  // Run the unit test when the suite is run
-  TEST(compareVectors);
-} // my_suite
+  const size_t nrows = 3, ncols = 3;
+  SpMV::SparseMatrix_ELL<double> A(nrows, ncols);
 
-// We can also create templated tests and suites
-template <typename T>
-TEST_CASE(addition) 
-{
-  T const a = 1;
-  T const b = 2;
-  T const c = 3;
-  ASSERT(a + b == c);
-} // addition
+  // Matrix:
+  // [1 0 2]
+  // [0 3 0]
+  // [4 0 5]
+  A.setValue(0, 0, 1.0);
+  A.setValue(0, 2, 2.0);
+  A.setValue(1, 1, 3.0);
+  A.setValue(2, 0, 4.0);
+  A.setValue(2, 2, 5.0);
 
-template <typename T>
-TEST_CASE(subtraction) {
-  T const a = 3;
-  T const b = 2;
-  T const c = 1;
-  ASSERT(a - b == c);
-} // subtraction
+  A.assemble();
 
-template <size_t N, typename T>
-TEST_CASE(fixed_size_dot_product) {
-  // Create an array of N 1's and an array of N 2's
-  T a[N]; 
-  T b[N];
-  for (size_t i = 0; i < N; ++i) {
-    a[i] = 1;
-    b[i] = 2;
+  // Views
+  const auto& vals = A.values_view();           // flat row-major length = nrows*K
+  const auto& cols = A.col_indices_view();
+
+  // Guards to avoid segfault if assemble() didn't allocate yet
+  ASSERT(!cols.empty());
+  ASSERT(!vals.empty());
+
+  // Prefer row_width(); if it's 0 (or not reliable), infer K from sizes
+  size_t K = A.row_width();
+  if (K == 0) {
+    ASSERT(cols.size() % nrows == 0);
+    ASSERT(vals.size() % nrows == 0);
+    K = cols.size() / nrows;
   }
+  ASSERT(K > 0);
+  ASSERT(vals.size() == nrows * K);
+  ASSERT(cols.size() == nrows * K);
 
-  // Compute the dot product
-  T dot = 0;
-  for (size_t i = 0; i < N; ++i) {
-    dot += a[i] * b[i];
+  // Expected per row (order-agnostic; we sort by col before comparing)
+  // r=0: (0,1), (2,2)
+  // r=1: (1,3)
+  // r=2: (0,4), (2,5)
+  {
+    auto got0 = row_entries(cols, vals, 0, K);
+    std::vector<Entry> exp0{{0,1.0},{2,2.0}};
+    std::sort(exp0.begin(), exp0.end(), [](auto&a, auto&b){return a.c<b.c;});
+    assert_same_entries(got0, exp0);
   }
+  {
+    auto got1 = row_entries(cols, vals, 1, K);
+    std::vector<Entry> exp1{{1,3.0}};
+    assert_same_entries(got1, exp1);
+  }
+  {
+    auto got2 = row_entries(cols, vals, 2, K);
+    std::vector<Entry> exp2{{0,4.0},{2,5.0}};
+    std::sort(exp2.begin(), exp2.end(), [](auto&a, auto&b){return a.c<b.c;});
+    assert_same_entries(got2, exp2);
+  }
+}
 
-  // Compare to the solution
-  T const soln = 2 * N;
-  ASSERT(dot == soln);
-} // fixed_size_dot_product
-
-template <typename T>
-TEST_SUITE(add_sub_suite) 
+TEST_CASE(ell_view_const_correctness)
 {
-  TEST(addition<T>);
-  TEST(subtraction<T>);
-  // Use parentheses to pass a function with multiple template arguments.
-  // This is necessary because a comma is used to separate arguments in a
-  // template argument list as well as arguments to a macro
-  TEST((fixed_size_dot_product<3, T>));
-  TEST((fixed_size_dot_product<4, T>));
-} // add_sub_suite
+  SpMV::SparseMatrix_ELL<double> A(2, 3);
+  A.setValue(0, 1, 7.0);
+  A.assemble();
 
-auto
-main() -> int
+  const auto& C = A; // const reference must still allow read-only views
+  (void)C.values_view();
+  (void)C.col_indices_view();
+  (void)C.row_width();
+}
+
+TEST_SUITE(ell_view_suite)
 {
-  // Run the unit tests. If a test fails, the program will print failure info
-  // and return 1.
-  RUN_SUITE(my_suite);
-  RUN_SUITE(add_sub_suite<int>);
-  RUN_SUITE(add_sub_suite<size_t>);
-  return 0; 
+  TEST(ell_view_shape_and_content_flat);
+  TEST(ell_view_const_correctness);
+}
+
+auto main() -> int
+{
+  RUN_SUITE(ell_view_suite);
+  return 0;
 }
