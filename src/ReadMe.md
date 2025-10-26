@@ -61,7 +61,7 @@ If the result vector does not exist, an error message is printed.
 ---
 
 **Method:**  
-`printJDSMatrixElementToConsole(const size_t row, const size_t column) const`  
+`printJDSMatrixElementToConsole(const int row, const int column) const`  
 **Purpose:**  
 Prints the value of a single matrix element located at the specified `(row, column)` index.
 
@@ -79,13 +79,6 @@ Prints the value of the input vector element at the given index.
 **Purpose:**  
 Prints the value of the result vector element at the given index.  
 If the result vector does not exist, an error message is printed.
-
----
-
-**Method:**  
-`printJDSMatrixRow(size_t row) const`  
-**Purpose:**  
-Prints all nonzero elements from the specified matrix row in the format `(column, value)`.
 
 ---
 

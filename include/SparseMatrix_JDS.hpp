@@ -2,6 +2,7 @@
 #define __SPMV_SparseMatrix_JDS__
 
 #include "SparseMatrix.hpp"
+#include "spmv/jds_storage.hpp"
 #include <iostream>
 
 //PLEASE READ THE ReaadMe.md first!!!
@@ -28,10 +29,9 @@ namespace SpMV
             printJDSMatrixToConsole() const;
             printJDSVectorToConsole() const;
             printJDSResultVectorToConsole() const;
-            printJDSMatrixElementToConsole(const size_t row, const size_t column) const;
+            printJDSMatrixElementToConsole(const int row, const int column) const;
             printJDSVectorElementToConsole(const size_t index) const;
             printJDSResultVectorElementToConsole(const size_t index) const;
-            printJDSMatrixRow(size_t row) const;
             printJDSResultVectorToLogFile(const std::string& filename) const;
     };
 }

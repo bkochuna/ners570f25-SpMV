@@ -18,11 +18,13 @@ namespace SpMV
 {
     template <class fp_type>
     void SparseMatrix_JDS<fp_type>::printJDSInputMatrixSummary() const{
-        auto jdsMatrix = this->holderGetJDSMatrix();
+        spmv::JDS B;
+
+        spmv::JDS coo = spmv::disassemble_toCOO(B);
         //access jdsMatrix properties and print summary
         cout << "===== JDS Matrix Summary =====" << endl;
-        cout << "Rows: " << jdsMatrix.numRows << ", Cols: " << jdsMatrix.numCols << ", NNZ: " << jdsMatrix.nnz << endl;
-        cout << "Max row length: " << jdsMatrix.maxRowLength << endl;
+        int nnz = static_cast<int>(coo.row.size());
+        cout << "Rows: " << coo.nrows << ", Cols: " << coo.ncols << ", NNZ: " << nnz << endl;
     }
 
     template <class fp_type>
@@ -47,26 +49,26 @@ namespace SpMV
     }
 
     template <class fp_type>
-    void SparseMatrix_JDS<fp_type>::printJDSMatrixToConsole() const{
-        //access jdsMatrix properties and print summary
-        auto jdsMatrix = this->holderGetJDSMatrix(); //Assuming the matrix is stored here
-        cout << "===== JDS Matrix View =====" << endl; //Again making assumptions about how the data is stored
-        cout << "Num rows: " << jdsMatrix.numRows << endl; //Again making assumptions about how the data is stored
-        cout << "Num columns: " << jdsMatrix.numCols << endl; //Again making assumptions about how the data is stored
-        cout << "Nonzero elements: " << jdsMatrix.nnz << endl; //Again making assumptions about how the data is stored
-        cout << endl;
+    void SparseMatrix_JDS<fp_type>::printJDSMatrixToConsole() const {
+        spmv::JDS B;
 
-        //Print matrix with row, column, value format
-        cout << "Row Col Val" << endl;
-        for (size_t i = 0; i < jdsMatrix.numRows; ++i) {
-            for (size_t j = 0; j < jdsMatrix.numCols; ++j) {
-                double val = jdsMatrix.getValue(i, j); //Assuming a method to get value at (i, j)
-                if (val != 0) {
-                    cout << i << " " << j << " " << val << endl;
-                }
-            }
+
+        spmv::COO coo = spmv::disassemble_toCOO(B);
+
+        int nnz = static_cast<int>(coo.row.size());
+
+        std::cout << "===== JDS Matrix View =====" << std::endl;
+        std::cout << "Num rows: " << coo.nrows << std::endl;
+        std::cout << "Num cols: " << coo.ncols << std::endl;
+        std::cout << "Nonzero elements: " << nnz << std::endl << std::endl;
+
+        // Print matrix entries
+        std::cout << "Row  Col  Val" << std::endl;
+        for (int i = 0; i < nnz; ++i) {
+            std::cout << coo.row[i] << "   "
+                    << coo.col[i] << "   "
+                    << coo.val[i] << std::endl;
         }
-        
     }
 
     template <class fp_type>
@@ -114,11 +116,22 @@ namespace SpMV
     }
 
     template <class fp_type>
-    void SparseMatrix_JDS<fp_type>::printJDSMatrixElementToConsole(const size_t row, const size_t column) const{
-        //access jdsMatrix properties and print single element
-        auto jdsMatrix = this->holderGetJDSMatrix(); //Assuming the matrix is stored here
-        double value = jdsMatrix.getValue(row, column); //Assuming a method to get value at (i, j)
-        cout << "Value at (" << row << ", " << column << ") = " << value << endl;
+    void SparseMatrix_JDS<fp_type>::printJDSMatrixElementToConsole(const int row, const int column) const {
+        // Access stored JDS matrix
+        spmv::JDS B;
+
+        spmv::COO coo = spmv::disassemble_toCOO(B);
+
+        // Search for the element at (row, column)
+        double value = 0;
+        for (size_t i = 0; i < coo.row.size(); ++i) {
+            if (coo.row[i] == row && coo.col[i] == column) {
+                value = coo.val[i];
+                break;
+            }
+        }
+
+        std::cout << "Value at (" << row << ", " << column << ") = " << value << std::endl;
     }
 
     template <class fp_type>
@@ -142,18 +155,6 @@ namespace SpMV
         cout << "Value at index " << index << " = " << value << endl;
     }
 
-    template <class fp_type>
-    void SparseMatrix_JDS<fp_type>::printJDSMatrixRow(size_t row) const{
-        //access jdsMatrix properties and print single row
-        auto jdsMatrix = this->holderGetJDSMatrix();
-        cout << "Row " << row << ": ";
-        //print all non-zero elements in the row
-        for (size_t j = 0; j < jdsMatrix.numCols; ++j) {
-            double val = jdsMatrix.getValue(row, j);
-            if (val != 0) cout << "(" << j << ", " << val << ") ";
-        }
-        cout << endl;
-    }
 
     template <class fp_type>
     void SparseMatrix_JDS<fp_type>::printJDSResultVectorToLogFile(const std::string& filename) const{
