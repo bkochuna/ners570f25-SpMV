@@ -21,7 +21,7 @@ public:
     SparseMatrix_JDS(const size_t nrows, const size_t ncols);
 
     // Destructor
-    ~SparseMatrix_JDS() = default;
+    ~SparseMatrix_JDS()
 
     // Assemble JDS from COO/CSR (optional to implement now)
     void assemble();
