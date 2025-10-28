@@ -38,10 +38,19 @@ namespace SpMV
 
 
 	////// Storage Function(s)
-	template <class fp_type>
-	void SparseMatrix_DEN<fp_type>::assemble() {
-		assembleStorage();
-	}
+    template <class fp_type>
+    void SparseMatrix_DEN<fp_type>::assemble() {
+        if (this->_state == MatrixState::initialized) {
+            // nothing in _buildCoeff yet, just mark assembled
+            this->_state = MatrixState::assembled;
+        } else if (this->_state == MatrixState::building) {
+            assembleStorage();
+        } else {
+            // optional: handle other states
+            assert(false && "assemble() called in invalid state");
+        }
+    }
+
 
 	template <class fp_type>
     void SparseMatrix_DEN<fp_type>::assembleStorage() {
