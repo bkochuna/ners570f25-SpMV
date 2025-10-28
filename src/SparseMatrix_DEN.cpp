@@ -108,13 +108,11 @@ namespace SpMV
 	template <class fp_type>
     std::vector<fp_type> SparseMatrix_DEN<fp_type>::matvec(const std::vector<fp_type>& x) const
     {
-        // this is a temperary version of matvec
         assert(this->_state == MatrixState::assembled);
         assert(x.size() == this->_ncols);
 
         std::vector<fp_type> y(this->_nrows, static_cast<fp_type>(0));
 
-        // Perform dense matrix-vector multiplication
         for (size_t i = 0; i < this->_nrows; ++i)
         {
             for (size_t j = 0; j < this->_ncols; ++j)
@@ -125,7 +123,7 @@ namespace SpMV
         return y;
     }
 
-}
+} // namespace SpMV
 
 // Concrete template declaration
 template class SpMV::SparseMatrix_DEN<float>;

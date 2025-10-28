@@ -1,9 +1,12 @@
-#ifndef __SPMV_SparseMatrix_DEN__
-#define __SPMV_SparseMatrix_DEN__
+#ifndef __SPMV_SPARSEMATRIX_DEN__
+#define __SPMV_SPARSEMATRIX_DEN__
 
 #include "SparseMatrix.hpp"
 #include <memory>
 #include <vector>
+#include <stdexcept>
+#include <iostream>
+#include <cassert>
 
 namespace SpMV
 {
