@@ -80,7 +80,7 @@ TEST_CASE(test_JDS_bad_input){
 //test JDS destructor
 TEST_CASE(test_JDS_destructor){
     // Create a pointer to test destructor cleanup
-    auto *A = new SparseMatrix_JDS<double> F(5, 5);
+    auto *A = new SparseMatrix_JDS<double>(5, 5);
     delete A;
 
     // If no memory leaks or segfaults, test passes
