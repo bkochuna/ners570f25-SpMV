@@ -14,37 +14,33 @@ using namespace SpMV;
 TEST_CASE(test_JDS_constructor_initialization_size8){
     SparseMatrix_JDS<double> A(8, 8);
 
-    ASSERT(A._nrows == 8);
-    ASSERT(A._ncols == 8);
-
-    ASSERT(A._state == MatrixState::initialized);
+    ASSERT(A.getNrows() == 8);
+    ASSERT(A.getNcols() == 8);
+    ASSERT(A.getState() == MatrixState::initialized);
 }
 
 TEST_CASE(test_JDS_constructor_initialization_size64){
     SparseMatrix_JDS<double> A(64, 64);
 
-    ASSERT(A._nrows == 64);
-    ASSERT(A._ncols == 64);
-
-    ASSERT(A._state == MatrixState::initialized);
+    ASSERT(A.getNrows() == 64);
+    ASSERT(A.getNcols() == 64);
+    ASSERT(A.getState() == MatrixState::initialized);
 }
 
 TEST_CASE(test_JDS_constructor_initialization_size256){
     SparseMatrix_JDS<double> A(256, 256);
 
-    ASSERT(A._nrows == 256);
-    ASSERT(A._ncols == 256);
-
-    ASSERT(A._state == MatrixState::initialized);
+    ASSERT(A.getNrows() == 256);
+    ASSERT(A.getNcols() == 256);
+    ASSERT(A.getState() == MatrixState::initialized);
 }
 
 TEST_CASE(test_JDS_constructor_initialization_size1024){
     SparseMatrix_JDS<double> A(1024, 1024);
 
-    ASSERT(A._nrows == 1024);
-    ASSERT(A._ncols == 1024);
-
-    ASSERT(A._state == MatrixState::initialized);
+    ASSERT(A.getNrows() == 1024);
+    ASSERT(A.getNcols() == 1024);
+    ASSERT(A.getState() == MatrixState::initialized);
 }
 
 // since most function inherited are modified, omit inheritance testing here
