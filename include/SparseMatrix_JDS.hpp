@@ -22,6 +22,10 @@ public:
 
     // Destructor
     ~SparseMatrix_JDS();
+    
+    size_t getNrows() const { return _nrows; }
+    size_t getNcols() const { return _ncols; }
+    MatrixState getState() const { return _state; }
 
     // Assemble JDS from COO/CSR (optional to implement now)
     void assemble();
