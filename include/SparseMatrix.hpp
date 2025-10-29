@@ -28,6 +28,9 @@ namespace SpMV
         SparseMatrix(const size_t nrows, const size_t ncols);
         virtual ~SparseMatrix();
 
+        size_t getNrows() const { return _nrows; }
+        size_t getNcols() const { return _ncols; }
+        MatrixState getState() const { return _state; }
         void    setValue(const size_t i, const size_t j, fp_type val);
         fp_type getValue(const size_t i, const size_t j);
         virtual void assemble() =0; // The "=0" defines this class as abstract
