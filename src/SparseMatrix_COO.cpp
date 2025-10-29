@@ -1,29 +1,25 @@
 #include "SparseMatrix_COO.hpp"
-
 #include <iostream>
-#include <stddef.h>
 
-using namespace std;
+namespace SpMV {
 
-namespace SpMV
+template<class fp_type>
+SparseMatrix_COO<fp_type>::SparseMatrix_COO(size_t nrows, size_t ncols)
+  : SparseMatrix<fp_type>(nrows, ncols)   // <-- call base-class ctor
 {
-    template <class fp_type>
-    SparseMatrix_COO<fp_type>::SparseMatrix_COO(const size_t nrows, const size_t ncols) :
-        SparseMatrix<fp_type>::SparseMatrix(nrows, ncols)
-    {
-        cout << "Hello from COO Constructor" << endl;
-    }
 
-    template <class fp_type>
-    void SparseMatrix_COO<fp_type>::assemble()
-    {
-        cout << "Hello from COO assemble" << endl;
-
-        //This routine needs to convert _buildCoeff into the COO storage format.
-    }
 }
 
-// Need to declare the concrete templates within the library for
-// use in code that links to libspmv
-template class SpMV::SparseMatrix_COO<float>;
-template class SpMV::SparseMatrix_COO<double>;
+template<class fp_type>
+void SparseMatrix_COO<fp_type>::assemble()
+{
+    std::cout << "Hello from COO assemble" << std::endl;
+    this->_assembled = true;  // mark finalized (declared in the header)
+}
+
+// Explicit template instantiations (types you use)
+template class SparseMatrix_COO<double>;
+template class SparseMatrix_COO<float>;
+
+} // namespace SpMV
+
