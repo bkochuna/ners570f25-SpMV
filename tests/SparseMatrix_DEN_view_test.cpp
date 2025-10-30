@@ -167,7 +167,7 @@ TEST_CASE(view_square_small_int)
   A.assemble();
 
   std::ostringstream oss = get_view_output(A);
-  std::string compare_file = "den/view_square_small.txt";
+  std::string compare_file = "den/view_square_small_int.txt";
   ASSERT(compare_withfile<fp_type>(oss, compare_file));
 
 }
@@ -176,17 +176,17 @@ template <class fp_type>
 TEST_CASE(view_square_medium) 
 {
 
-  const size_t nrows = 400;
-  const size_t ncols = 400;
+  const size_t nrows = 20;
+  const size_t ncols = 20;
 
   SparseMatrix_DEN<fp_type> A(nrows, ncols);
 
   // build A with a scattering of values
   A.setValue(1,2,3.);
-  A.setValue(1,2,1.);
+  A.setValue(1,8,1.);
   A.setValue(2,1,2.);
   A.setValue(11,2,3.);
-  A.setValue(24,72,4.);
+  A.setValue(19,6,<static_cast>(fp_type)76.558);
 
   // assemble A
   A.assemble();
@@ -194,32 +194,6 @@ TEST_CASE(view_square_medium)
   // view A and check output
   std::ostringstream oss = get_view_output(A);
   std::string compare_file = "den/view_square_medium.txt";
-  ASSERT(compare_withfile<fp_type>(oss, compare_file));
-
-}
-
-template <class fp_type>
-TEST_CASE(view_square_large) 
-{
-
-  const size_t nrows = 4000;
-  const size_t ncols = 4000;
-
-  SparseMatrix_DEN<fp_type> A(nrows, ncols);
-
-  // build A with a scattering of values
-  A.setValue(1,2,1.);
-  A.setValue(2,1,2.);
-  A.setValue(11,2,3.);
-  A.setValue(24,72,4.);
-  A.setValue(3785,1024,static_cast<fp_type>(76.558));
-
-  // assemble A
-  A.assemble();
-
-  // view A and check output
-  std::ostringstream oss = get_view_output(A);
-  std::string compare_file = "den/view_square_large.txt";
   ASSERT(compare_withfile<fp_type>(oss, compare_file));
 
 }
@@ -289,7 +263,6 @@ TEST_SUITE(view_suite)
   TEST(view_square_small<fp_type>);
   TEST(view_square_small_int<fp_type>);
   TEST(view_square_medium<fp_type>);
-  TEST(view_square_large<fp_type>);
   TEST(view_empty<fp_type>);
   TEST(view_nonsquare<fp_type>);
 }

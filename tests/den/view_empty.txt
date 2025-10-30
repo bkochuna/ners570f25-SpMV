@@ -2,4 +2,7 @@ Matrix Name: A
 Storage Type: DEN (Dense Storage Method)
 Dimensions: 4 x 4
 Number of Non-Zero Values: 0
-I Index, J Index, Value
+0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
