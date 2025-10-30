@@ -31,13 +31,6 @@ namespace SpMV
     {
         assert(this->_state >= MatrixState::assembled);
 
-        //print out the header;
-        cout << "This is a matrix stored in the COO format. ";
-        cout << "It has " << this->_nrows << " rows, " ;
-        cout << this->_ncols << " columns, and " ;
-        cout << this->_numnz << " non-zero values." << endl;
-
-
         if (this->_idx_row.empty() || this->_idx_col.empty() || this->_aij.empty())
         {
             cout << "No Elements in Matrix " << endl;
