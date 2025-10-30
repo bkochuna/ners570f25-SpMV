@@ -17,27 +17,6 @@ using namespace SpMV;
 
 // Test suite for den view function
 
-// template <class fp_type>
-// TEST_CASE(view_matrixState) // Assertion errors in code cannot be caught.
-// {
-
-//   // Create a matrix but do not initialize it
-//   const size_t nrows = 4;
-//   const size_t ncols = 4;
-//   SparseMatrix_DEN<fp_type> A = new SparseMatrix_DEN(nrows, ncols);
-
-//   // calling view() on an initialized but unassembled matrix should fail.
-//   ASSERT( !(A.view()) );
-
-//   A.setValue(1,2,3.);
-//   // calling view() on an "building" matrix should fail.
-//   ASSERT( !(A.view()) );
-
-//   A.assemble();
-//   // calling view() on assembled matrix should succeed.
-//   ASSERT( A.view() );
-
-// }
 template <class fp_type>
 bool compare_withfile(std::ostringstream& oss, std::string& filename)
 {
@@ -78,6 +57,17 @@ bool compare_withfile(std::ostringstream& oss, std::string& filename)
 }
 
 template <class fp_type>
+std::ostringstream get_view_error(SparseMatrix_DEN<fp_type> A)
+{
+  std::ostringstream oserr;
+  std::streambuf* p_cerr_streambuf = std::cerr.rdbuf(); // store original std::cerr buffer
+  std::cerr.rdbuf(oserr.rdbuf()); // change cerr buffer to oserr
+  A.view();
+  std::cerr.rdbuf(p_cerr_streambuf); // restore std::cout buffer
+  return oserr;
+}
+
+template <class fp_type>
 std::ostringstream get_view_output(SparseMatrix_DEN<fp_type> A)
 {
   std::ostringstream oss;
@@ -86,6 +76,29 @@ std::ostringstream get_view_output(SparseMatrix_DEN<fp_type> A)
   A.view();
   std::cout.rdbuf(p_cout_streambuf); // restore std::cout buffer
   return oss;
+}
+
+template <class fp_type>
+TEST_CASE(view_matrixState) // Assertion errors in code cannot be caught.
+{
+
+  // Create a matrix but do not initialize it
+  const size_t nrows = 4;
+  const size_t ncols = 4;
+  SparseMatrix_DEN<fp_type> A(nrows, ncols);
+
+  // calling view() on an initialized but unassembled matrix should fail.
+  std::ostringstream oserr = get_view_error(A);
+  std::string compare_file = "den/not_assembled.txt";
+  ASSERT(compare_withfile<fp_type>(oserr, compare_file));
+
+  A.setValue(1,2,3.);
+  // calling view() on an "building" matrix should fail.
+  oserr = get_view_error(A);;
+  ASSERT(compare_withfile<fp_type>(oserr, compare_file));
+
+  // calling view() on assembled matrix should succeed -- this is tested in subsequent tests.
+
 }
 
 template <class fp_type>
@@ -102,7 +115,7 @@ TEST_CASE(view_dense)
   for (size_t i=0; i<nrows; i++) {
     for (size_t j=0; j<ncols; j++) {
       A.setValue(i,j,val);
-      val += 1.;
+      val += static_cast<fp_type>(1.);
     }
   }
 
@@ -271,7 +284,7 @@ TEST_CASE(view_nonsquare)
 template <class fp_type>
 TEST_SUITE(view_suite) 
 {
-  // TEST(view_matrixState<fp_type>);
+  TEST(view_matrixState<fp_type>);
   TEST(view_dense<fp_type>);
   TEST(view_square_small<fp_type>);
   TEST(view_square_small_int<fp_type>);

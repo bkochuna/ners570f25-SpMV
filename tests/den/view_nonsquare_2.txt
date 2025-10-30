@@ -1,3 +1,6 @@
-B, 4, 1, 1, DEN
+Matrix Name: B
+Storage Type: DEN (Dense Storage Method)
+Dimensions: 4 x 1
+Number of Non-Zero Values: 1
 I Index, J Index, Value
 2,       0,       3.
