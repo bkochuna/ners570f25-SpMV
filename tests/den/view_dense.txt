@@ -1,0 +1,8 @@
+Matrix Name: A
+Storage Type: DEN (Dense Storage Method)
+Dimensions: 4 x 4
+Number of Non-Zero Values: 16
+1  2  3  4
+5  6  7  8
+9  10 11 12
+13 14 15 16

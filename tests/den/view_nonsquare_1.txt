@@ -1,0 +1,5 @@
+Matrix Name: A
+Storage Type: DEN (Dense Storage Method)
+Dimensions: 1 x 4
+Number of Non-Zero Values: 1
+0 0 3 0

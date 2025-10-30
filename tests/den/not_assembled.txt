@@ -1,0 +1,1 @@
+[ERROR] Matrix 'A' has not been assembled. Cannot view contents.
