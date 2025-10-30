@@ -8,6 +8,8 @@ using namespace SpMV;
 
 // --- Helper function to create a small CSR matrix for testing ---
 template <typename T>
+// T is a template type parameter for the data type
+// Can be a float, double, int, etc. used for the matrix values.
 SparseMatrix_CSR<T> createTestCSR() {
     // 3x3 matrix:
     // [1 0 2]
