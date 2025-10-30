@@ -35,16 +35,18 @@ template <class fp_type> void SparseMatrix_ELL<fp_type>::viewMat() {
   const auto& maxNnz = this->getmaxNNZPerRow();
   const auto& values = this->getValues();
   const auto& colInd = this->getColInd();
-  std::vector<fp_type> mat(nrows * ncols, 0.0);
-  int maxDig = 1;
+  std::vector<fp_type> mat(nrows * ncols, 0.0); // creating DEN format matrix for printing
+  int maxDig = 1; // tracking and updating the max number of whole digits in matrix values
 
+  // Converting ELL format to DEN format for printing to ensure all zeros and
+  // non-zero values are printed in the correct ij location
   for (int i=0;i<nrows;i++){ // restructure as an ij grid for printing
       for (int j=0;j<maxNnz;j++) {
           int col = colInd[i*maxNnz+j];
           if (col != -1) {
-            mat[i*ncols+col] = values[i*maxNnz+j];
+            mat[i*ncols+col] = values[i*maxNnz+j]; // fill non-zero numbers into preset zero vector
             if ((floor(log10(abs(values[i*maxNnz+j]))))+1> (log10(maxDig))) {
-              maxDig = static_cast<int>(floor(log10(abs(values[i*maxNnz+j])))+1);
+              maxDig = static_cast<int>(floor(log10(abs(values[i*maxNnz+j])))+1); // updating max number of digits in whole number representation for printing purposes
             }
           }
       }
@@ -65,8 +67,7 @@ template <class fp_type> void SparseMatrix_ELL<fp_type>::viewMat() {
     }
   }
 }
-} // namespace SpMV
-// Need to declare the concrete templates within the library for
-// use in code that links to libspmv
+} 
+
 template class SpMV::SparseMatrix_ELL<float>;
 template class SpMV::SparseMatrix_ELL<double>;
