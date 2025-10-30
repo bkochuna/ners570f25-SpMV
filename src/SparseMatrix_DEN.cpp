@@ -40,33 +40,29 @@ namespace SpMV
 	////// Storage Function(s)
     template <class fp_type>
     void SparseMatrix_DEN<fp_type>::assemble() {
-        if (this->_state == MatrixState::initialized) {
-            // nothing in _buildCoeff yet, just mark assembled
-            this->_state = MatrixState::assembled;
-        } else if (this->_state == MatrixState::building) {
-            assembleStorage();
-        } else {
-            // optional: handle other states
-            assert(false && "assemble() called in invalid state");
-        }
+        assembleStorage();
     }
 
 
 	template <class fp_type>
     void SparseMatrix_DEN<fp_type>::assembleStorage() {
-        assert(this->_state == MatrixState::building);
-        
-        for (const auto & [ij,v] : this->_buildCoeff) {
-            const size_t i = ij.first;
-            const size_t j = ij.second;
-            assert((i < this->_nrows) && (j < this->_ncols));
-            _Matrix[i][j] = v;
-        
+        assert(this->_state == MatrixState::initialized || this->_state==MatrixState::building);
+        if (this->_state == MatrixState::initialized) {
+            // nothing in _buildCoeff yet, just mark assembled
+            this->_state = MatrixState::assembled;
+        }
+        else {
+            for (const auto & [ij,v] : this->_buildCoeff) {
+                const size_t i = ij.first;
+                const size_t j = ij.second;
+                assert((i < this->_nrows) && (j < this->_ncols));
+                _Matrix[i][j] = v;
+            }
+            this->_buildCoeff.clear();
+
+            this->_state = MatrixState::assembled;
         }
 
-        this->_buildCoeff.clear();
-
-        this->_state = MatrixState::assembled;
     }
 	
     template <class fp_type>
@@ -107,7 +103,7 @@ namespace SpMV
 		else {
 			return _Matrix[i][j]; }
 	}
-
+    
     ////// View Function(s)
 
 

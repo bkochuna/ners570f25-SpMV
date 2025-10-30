@@ -26,6 +26,13 @@ namespace SpMV
             void disassembleStorage();
             fp_type getValue(const size_t i, const size_t j);
             std::vector<fp_type> matvec(const std::vector<fp_type>& x) const;
+            // Getters for testing
+            size_t nrows() const { return _nrows; }
+            size_t ncols() const { return _ncols; }
+            size_t numnz() const { return _numnz; }
+            MatrixState getState() const { return _state; }
+            bool buildCoeffEmpty() const { return _buildCoeff.empty(); }
+            size_t buildCoeffSize() const { return _buildCoeff.size(); }
     };
 
 }
