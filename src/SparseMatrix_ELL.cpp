@@ -30,11 +30,11 @@ template <class fp_type> void SparseMatrix_ELL<fp_type>::assemble() {
 
 // View Method
 template <class fp_type> void SparseMatrix_ELL<fp_type>::viewMat() {
-  const int nrows = this->getNumRows();
-  const int ncols = this->getNumCols();
-  const int maxNnz = this->getmaxNNZPerRow();
-  const auto& values = this->values;
-  const auto& colInd = this->colIndices;
+  const int nrows = this->_nrows;
+  const int ncols = this->_ncols;
+  const auto& maxNnz = this->getmaxNNZPerRow();
+  const auto& values = this->getValues();
+  const auto& colInd = this->getColInd();
   std::vector<fp_type> mat(nrows * ncols, 0.0);
   int maxDig = 1;
 
