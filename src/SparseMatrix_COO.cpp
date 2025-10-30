@@ -25,15 +25,10 @@ namespace SpMV
     template <class fp_type>
     void SparseMatrix_COO<fp_type>::setValue(const size_t i, const size_t j, fp_type val) :
         SparseMatrix<fp_type>::setValue(i, j, val)
-    // {
-    //     cout << "Hello from COO setValue" << endl;
-    // }
 
     template <class fp_type>
     fp_type SparseMatrix_COO<fp_type>::getValue(const size_t i, const size_t j) :
-        //SparseMatrix<fp_type>::getValue(i, j)
     {
-        cout << "Hello from COO getValue" << endl;
         assert(this->_state >= MatrixState::assembled);
         assert(i < this->_nrow);
         assert(j < this->_ncol);
