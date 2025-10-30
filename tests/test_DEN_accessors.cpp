@@ -22,8 +22,8 @@ TEST_CASE(test_DEN_accessors)
     mat.setValue(2, 2, 9.0);
 
     // Verify numRows and numCols
-    ASSERT(mat.numRows() == 3);
-    ASSERT(mat.numCols() == 3);
+    ASSERT(mat.nrows() == 3); 
+    ASSERT(mat.ncols() == 3);
 
     // Verify getValue returns correct values
     ASSERT_NEAR(mat.getValue(0, 0), 1.0, 1e-12);
