@@ -13,12 +13,12 @@
 // other.
 
 // Create a unit test
-
+template <typename fp_type>
 TEST_CASE(assemble_initialized_matrix) 
 {
 
   // Test on an initialized matrix
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(4,4);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(4,4);
   bool exception_thrown = false;
   try
   {
@@ -30,11 +30,11 @@ TEST_CASE(assemble_initialized_matrix)
   }
   ASSERT(exception_thrown == true);
 }
+template <typename fp_type>
 TEST_CASE(assemble_assembled_matrix) 
 {
-
   // Test on an assembled matrix
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(4,4);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(4,4);
   A.assemble();
   bool exception_thrown = false;
   try
@@ -47,11 +47,12 @@ TEST_CASE(assemble_assembled_matrix)
   }
   ASSERT(exception_thrown == true);
 }
+
+template <typename fp_type>
 TEST_CASE(assemble_building_matrix) 
 {
-
   // Test on an building matrix
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(4,4);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(4,4);
   A.setValue(0,0,2);
   bool exception_thrown = false;
   try
@@ -65,11 +66,11 @@ TEST_CASE(assemble_building_matrix)
   ASSERT(exception_thrown == false);
 }
 
+template <typename fp_type>
 TEST_CASE(disassemble_initialized_matrix) 
 {
-
   // Test on an initialized matrix
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(4,4);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(4,4);
   bool exception_thrown = false;
   try
   {
@@ -81,11 +82,11 @@ TEST_CASE(disassemble_initialized_matrix)
   }
   ASSERT(exception_thrown == true);
 }
+template <typename fp_type>
 TEST_CASE(disassemble_assembled_matrix) 
 {
-
   // Test on an assembled matrix
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(4,4);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(4,4);
   A.assemble();
   bool exception_thrown = false;
   try
@@ -98,11 +99,11 @@ TEST_CASE(disassemble_assembled_matrix)
   }
   ASSERT(exception_thrown == false);
 }
+template <typename fp_type>
 TEST_CASE(disassemble_building_matrix) 
 {
-
   // Test on an building matrix
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(4,4);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(4,4);
   A.setValue(0,0,2);
   bool exception_thrown = false;
   try
@@ -116,10 +117,10 @@ TEST_CASE(disassemble_building_matrix)
   ASSERT(exception_thrown == true);
 }
 
+template <typename fp_type>
 TEST_CASE(disassemble_check)
 {
-
-SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(4,4);
+SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(4,4);
 A.setValue(0,0,2);
 A.setValue(3,2,-7);
 A.assemble();
@@ -127,7 +128,7 @@ A.disassembleStorage();
 
 std::vector <size_t> ia;
 std::vector <size_t> ja;
-std::vector <double> a;
+std::vector <fp_type> a;
 
  ia = A.ia();
  ja = A.ja();
@@ -138,16 +139,17 @@ ASSERT(ja.size() == 0);
 ASSERT(a.size() == 0);
 }
 
+template <typename fp_type>
 TEST_CASE(positive_sparse) 
 {
-
+  fp_type tol = 1/1000;
   // Initialize variables for testing
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(4,4);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(4,4);
 
   //establish rowPtr, colIdx, and value arrays, and use them to generate matix. 
   std::vector <size_t> rowPtrs = {0,2,5,9,10};
   std::vector <size_t> colIdx = {0,1,0,2,3,0,1,2,3,3};
-  std::vector <double> value = {1,7,5,3,9,20,2,8,6,6};
+  std::vector <fp_type> value = {1,7,5,3,9,20,2,8,6,6};
 
   size_t value_ind = 0;
   for(size_t i = 0; i < rowPtrs.size()-1; i++)
@@ -161,7 +163,7 @@ TEST_CASE(positive_sparse)
   A.assemble();
   std::vector <size_t> ia;
   std::vector <size_t> ja;
-  std::vector <double> a;
+  std::vector <fp_type> a;
 
   ia = A.ia();
   ja = A.ja();
@@ -182,22 +184,23 @@ TEST_CASE(positive_sparse)
     for (size_t h = 0; h < colIdx.size(); h++) 
   {
       ASSERT(colIdx[h] == ja[h]); 
-      ASSERT_NEAR(value[h], a[h], 1e-3);
+      ASSERT_NEAR(value[h], a[h], tol);
   }
 
   
 }
 
+template <typename fp_type>
 TEST_CASE(negative_sparse) 
 {
-
+  fp_type tol = 1/1000;
   // Initialize variables for testing
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(4,4);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(4,4);
 
   //establish rowPtr, colIdx, and value arrays, and use them to generate matix. 
   std::vector <size_t> rowPtrs = {0,2,5,9,10};
   std::vector <size_t> colIdx = {0,1,0,2,3,0,1,2,3,3};
-  std::vector <double> value = {-1,-7,-5,-3,-9,-20,-2,-8,-6,-6};
+  std::vector <fp_type> value = {-1,-7,-5,-3,-9,-20,-2,-8,-6,-6};
 
   size_t value_ind = 0;
   for(size_t i = 0; i < rowPtrs.size()-1; i++)
@@ -211,7 +214,7 @@ TEST_CASE(negative_sparse)
   A.assemble();
   std::vector <size_t> ia;
   std::vector <size_t> ja;
-  std::vector <double> a;
+  std::vector <fp_type> a;
 
   ia = A.ia();
   ja = A.ja();
@@ -232,22 +235,23 @@ TEST_CASE(negative_sparse)
     for (size_t h = 0; h < colIdx.size(); h++) 
   {
       ASSERT(colIdx[h] == ja[h]); 
-      ASSERT_NEAR(value[h], a[h], 1e-3);
+      ASSERT_NEAR(value[h], a[h], tol);
   }
 
   
 }
 
+template <typename fp_type>
 TEST_CASE(mixed_sparse) 
 {
-
+  fp_type tol = 1/1000;
   // Initialize variables for testing
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(4,4);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(4,4);
 
   //establish rowPtr, colIdx, and value arrays, and use them to generate matix. 
   std::vector <size_t> rowPtrs = {0,2,5,9,10};
   std::vector <size_t> colIdx = {0,1,0,2,3,0,1,2,3,3};
-  std::vector <double> value = {-1,-7,5,-3,-9,20,2,-8,-6,6};
+  std::vector <fp_type> value = {-1,-7,5,-3,-9,20,2,-8,-6,6};
 
   size_t value_ind = 0;
   for(size_t i = 0; i < rowPtrs.size()-1; i++)
@@ -261,7 +265,7 @@ TEST_CASE(mixed_sparse)
   A.assemble();
   std::vector <size_t> ia;
   std::vector <size_t> ja;
-  std::vector <double> a;
+  std::vector <fp_type> a;
 
   ia = A.ia();
   ja = A.ja();
@@ -282,21 +286,23 @@ TEST_CASE(mixed_sparse)
     for (size_t h = 0; h < colIdx.size(); h++) 
   {
       ASSERT(colIdx[h] == ja[h]); 
-      ASSERT_NEAR(value[h], a[h], 1e-3);
+      ASSERT_NEAR(value[h], a[h], tol);
   }
 
   
 }
+
+template <typename fp_type>
 TEST_CASE(dense) 
 {
-
+  fp_type tol = 1/1000;
   // Initialize variables for testing
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(4,4);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(4,4);
 
   //establish rowPtr, colIdx, and value arrays, and use them to generate matix. 
   std::vector <size_t> rowPtrs = {0,4,8,12,16};
   std::vector <size_t> colIdx = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
-  std::vector <double> value = {0,1,-2,-3,-4,-5,6,7,8,9,10,11,12,13,14,15};
+  std::vector <fp_type> value = {0,1,-2,-3,-4,-5,6,7,8,9,10,11,12,13,14,15};
 
   size_t value_ind = 0;
   for(size_t i = 0; i < rowPtrs.size()-1; i++)
@@ -310,7 +316,7 @@ TEST_CASE(dense)
   A.assemble();
   std::vector <size_t> ia;
   std::vector <size_t> ja;
-  std::vector <double> a;
+  std::vector <fp_type> a;
 
   ia = A.ia();
   ja = A.ja();
@@ -331,21 +337,23 @@ TEST_CASE(dense)
     for (size_t h = 0; h < colIdx.size(); h++) 
   {
       ASSERT(colIdx[h] == ja[h]); 
-      ASSERT_NEAR(value[h], a[h], 1e-3);
+      ASSERT_NEAR(value[h], a[h], tol);
   }
 
   
 }
+
+template <typename fp_type>
 TEST_CASE(big) 
 {
-
+  fp_type tol = 1/1000;
   // Initialize variables for testing
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(50,50);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(50,50);
 
   //establish rowPtr, colIdx, and value arrays, and use them to generate matix. 
   std::vector <size_t> rowPtrs = {0,7,8,13,16};
   std::vector <size_t> colIdx = {0,1,2,3,4,5,6,3,0,1,25,40,49,11,26,34};
-  std::vector <double> value = {0,1,-2,-3,-4,-5,6,7,8,9,10,11,12,13,14,15};
+  std::vector <fp_type> value = {0,1,-2,-3,-4,-5,6,7,8,9,10,11,12,13,14,15};
 
   size_t value_ind = 0;
   for(size_t i = 0; i < rowPtrs.size()-1; i++)
@@ -359,7 +367,7 @@ TEST_CASE(big)
   A.assemble();
   std::vector <size_t> ia;
   std::vector <size_t> ja;
-  std::vector <double> a;
+  std::vector <fp_type> a;
 
   ia = A.ia();
   ja = A.ja();
@@ -380,21 +388,23 @@ TEST_CASE(big)
     for (size_t h = 0; h < colIdx.size(); h++) 
   {
       ASSERT(colIdx[h] == ja[h]); 
-      ASSERT_NEAR(value[h], a[h], 1e-3);
+      ASSERT_NEAR(value[h], a[h], tol);
   }
 
   
 }
+
+template <typename fp_type>
 TEST_CASE(bigger) 
 {
-
+  fp_type tol = 1/1000;
   // Initialize variables for testing
-  SpMV::SparseMatrix_CSR<double> A = SpMV::SparseMatrix_CSR<double>(1000,1000);
+  SpMV::SparseMatrix_CSR<fp_type> A = SpMV::SparseMatrix_CSR<fp_type>(1000,1000);
 
   //establish rowPtr, colIdx, and value arrays, and use them to generate matix. 
   std::vector <size_t> rowPtrs = {0,7,8,13,16};
   std::vector <size_t> colIdx = {0,1,2,3,4,5,6,3,0,1,25,40,49,11,26,34};
-  std::vector <double> value = {0,1,-2,-3,-4,-5,6,7,8,9,10,11,12,13,14,15};
+  std::vector <fp_type> value = {0,1,-2,-3,-4,-5,6,7,8,9,10,11,12,13,14,15};
 
   size_t value_ind = 0;
   for(size_t i = 0; i < rowPtrs.size()-1; i++)
@@ -408,7 +418,7 @@ TEST_CASE(bigger)
   A.assemble();
   std::vector <size_t> ia;
   std::vector <size_t> ja;
-  std::vector <double> a;
+  std::vector <fp_type> a;
 
   ia = A.ia();
   ja = A.ja();
@@ -429,7 +439,7 @@ TEST_CASE(bigger)
     for (size_t h = 0; h < colIdx.size(); h++) 
   {
       ASSERT(colIdx[h] == ja[h]); 
-      ASSERT_NEAR(value[h], a[h], 1e-3);
+      ASSERT_NEAR(value[h], a[h], tol);
   }
 
   
@@ -439,23 +449,38 @@ TEST_CASE(bigger)
 TEST_SUITE(assemble) 
 {
   // Run the unit test when the suite is run
-  TEST(assemble_initialized_matrix); //this test fails
-  TEST(assemble_assembled_matrix);
-  TEST(assemble_building_matrix);
-  TEST(positive_sparse); //this test fails
-  TEST(negative_sparse); //this test fails
-  TEST(mixed_sparse); //this test fails
-  TEST(dense); //this test fails
-  TEST(big); //this test fails
-  TEST(bigger)
+  TEST(assemble_initialized_matrix<float>); //this test fails
+  TEST(assemble_assembled_matrix<float>);
+  TEST(assemble_building_matrix<float>);
+  TEST(positive_sparse<float>); //this test fails
+  TEST(negative_sparse<float>); //this test fails
+  TEST(mixed_sparse<float>); //this test fails
+  TEST(dense<float>); //this test fails
+  TEST(big<float>); //this test fails
+  TEST(bigger<float>);
+
+  TEST(assemble_initialized_matrix<double>); //this test fails
+  TEST(assemble_assembled_matrix<double>);
+  TEST(assemble_building_matrix<double>);
+  TEST(positive_sparse<double>); //this test fails
+  TEST(negative_sparse<double>); //this test fails
+  TEST(mixed_sparse<double>); //this test fails
+  TEST(dense<double>); //this test fails
+  TEST(big<double>); //this test fails
+  TEST(bigger<double>);
 } 
 
 TEST_SUITE(disassemble)
 {
-  TEST(disassemble_initialized_matrix);
-  TEST(disassemble_assembled_matrix);
-  TEST(disassemble_building_matrix);
-  TEST(disassemble_check);
+  TEST(disassemble_initialized_matrix<float>);
+  TEST(disassemble_assembled_matrix<float>);
+  TEST(disassemble_building_matrix<float>);
+  TEST(disassemble_check<float>);
+
+  TEST(disassemble_initialized_matrix<double>);
+  TEST(disassemble_assembled_matrix<double>);
+  TEST(disassemble_building_matrix<double>);
+  TEST(disassemble_check<double>);
 }
 
 auto
