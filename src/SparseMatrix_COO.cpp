@@ -75,6 +75,7 @@ namespace SpMV
             cout << left << this->_idx_col[i] << " | ";
             cout << this->_aij[i] << endl;
         }
+    }
     void SparseMatrix_COO<fp_type>::setValue(const size_t i, const size_t j, fp_type val) :
         SparseMatrix<fp_type>::setValue(i, j, val)
 
