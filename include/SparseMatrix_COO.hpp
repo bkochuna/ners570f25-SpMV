@@ -2,6 +2,9 @@
 #define __SPMV_SparseMatrix_COO__
 
 #include "SparseMatrix.hpp"
+#include <vector>
+#include <cstddef>
+#include <iostream>
 
 namespace SpMV
 {
@@ -9,7 +12,14 @@ namespace SpMV
     class SparseMatrix_COO : public SparseMatrix<fp_type>
     {
         public:
-            SparseMatrix_COO(const size_t nrows, const size_t ncols);
+            SparseMatrix_COO(size_t nrows, size_t ncols)
+                : SparseMatrix<fp_type>(nrows, ncols)
+            {
+                std::cout << "Hello from COO Constructor" << std::endl;
+            }
+
+            virtual ~SparseMatrix_COO() noexcept = default;
+
             void assemble();
     
     
