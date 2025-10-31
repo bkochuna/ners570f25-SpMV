@@ -114,6 +114,7 @@ namespace SpMV
 
         //For loop to perform matvec
         for (size_t i=0; i < (this->_numnz) ; i++) {
+            b[this->_idx_row[i]] += this->_aij[i] * x[this->_idx_col[i]]; 
             b[this->idx_row_[i]] += this->aij[i] * x[this->idx_col_[i]]; 
         }
 
