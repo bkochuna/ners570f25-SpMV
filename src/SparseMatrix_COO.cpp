@@ -33,15 +33,15 @@ namespace SpMV
         assert(this->_state == MatrixState::assembled);
 
         // if there are no elements, output that and end method.
-        if (this->idx_row_.empty() || this->idx_col_.empty() || this->aij.empty())
+        if (this->_idx_row.empty() || this->_idx_col.empty() || this->_aij.empty())
         {
             cout << "No Elements in Matrix " << endl;
             return;
         }
 
         //find the largest elements in the row and column index arrays
-        typename std::vector<size_t>::iterator max_in_rows= std::max_element(this->idx_row_.begin(), this->idx_row_.end());
-        typename std::vector<size_t>::iterator max_in_cols= std::max_element(this->idx_col_.begin(), this->idx_col_.end());
+        typename std::vector<size_t>::iterator max_in_rows= std::max_element(this->_idx_row.begin(), this->_idx_row.end());
+        typename std::vector<size_t>::iterator max_in_cols= std::max_element(this->_idx_col.begin(), this->_idx_col.end());
 
         //find the number of digits in those largest indicies using the whole number of log10(index)+1
         int max_i =static_cast<int> (std::floor(std::log10(*max_in_rows)+1));
@@ -70,11 +70,12 @@ namespace SpMV
         for(size_t i=0; i< this->_numnz; i++)
         {
             cout.width(i_width);
-            cout << left << this->idx_row_[i] << " | ";
+            cout << left << this->_idx_row[i] << " | ";
             cout.width(j_width);
-            cout << left << this->idx_col_[i] << " | ";
-            cout << this->aij[i] << endl;
+            cout << left << this->_idx_col[i] << " | ";
+            cout << this->_aij[i] << endl;
         }
+    }
     void SparseMatrix_COO<fp_type>::setValue(const size_t i, const size_t j, fp_type val) :
         SparseMatrix<fp_type>::setValue(i, j, val)
 
@@ -88,9 +89,9 @@ namespace SpMV
         // Traverse the nz values and find the value at (i,j)
         for (size_t idx = 0; idx < this->_numnz; idx++)
         {
-            if (this->idx_row_[idx] == i && this->idx_col_[idx] == j)
+            if (this->_idx_row[idx] == i && this->_idx_col[idx] == j)
             {
-                return this->aij[idx];
+                return this->_aij[idx];
             }
         }
         return 0.0;
@@ -115,7 +116,7 @@ namespace SpMV
         //For loop to perform matvec
         for (size_t i=0; i < (this->_numnz) ; i++) {
             b[this->_idx_row[i]] += this->_aij[i] * x[this->_idx_col[i]]; 
-            b[this->idx_row_[i]] += this->aij[i] * x[this->idx_col_[i]]; 
+            b[this->_idx_row[i]] += this->_aij[i] * x[this->_idx_col[i]]; 
         }
 
         return b;
