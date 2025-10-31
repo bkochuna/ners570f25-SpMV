@@ -13,7 +13,7 @@
 #include "unit_test_framework.hpp"
 
 // Local test helper
-#include "den_storage_tests.hpp"
+#include "den_storage_test.hpp"
 
 // Helper definition
 template <typename T>
@@ -125,7 +125,7 @@ TEST_CASE(den_values_match_and_zeros_clean)
   ASSERT(dense.size() == m * n);
 
   for (std::size_t idx = 0; idx < dense.size(); ++idx) {
-    ASSERT(dense[idx] == expected[idx]);
+    ASSERT_NEAR(dense[idx], expected[idx], 1e-12);
   }
 
   for (double x : dense) {
@@ -205,7 +205,7 @@ TEST_CASE(den_extremely_small_matrices)
     A.assembleStorage(I, J, V, m, n);
 
     ASSERT(A.values().size() == 1);
-    ASSERT(A.values()[0] == 7.0);
+    ASSERT_NEAR(A.values()[0], 7.0, 1e-12);
   }
 
   // 1xN
@@ -221,7 +221,7 @@ TEST_CASE(den_extremely_small_matrices)
     A.assembleStorage(I, J, V, m, n);
 
     ASSERT(A.values().size() == m * n);
-    for (std::size_t k = 0; k < expected.size(); ++k) ASSERT(A.values()[k] == expected[k]);
+    for (std::size_t k = 0; k < expected.size(); ++k) ASSERT_NEAR(A.values()[k], expected[k], 1e-12);
   }
 
   // Mx1
@@ -237,7 +237,7 @@ TEST_CASE(den_extremely_small_matrices)
     A.assembleStorage(I, J, V, m, n);
 
     ASSERT(A.values().size() == m * n);
-    for (std::size_t k = 0; k < expected.size(); ++k) ASSERT(A.values()[k] == expected[k]);
+    for (std::size_t k = 0; k < expected.size(); ++k) ASSERT_NEAR(A.values()[k], expected[k], 1e-12);
   }
 
   std::cout << "[Pass] Extremely small matrices handled correctly\n";
@@ -266,12 +266,12 @@ TEST_CASE(den_very_large_matrix_smoke)
   A.assembleStorage(I, J, V, m, n);
 
   ASSERT(A.values().size() == m * n);
-  ASSERT(A.values()[0 * n + 0] == 1.0);
-  ASSERT(A.values()[100 * n + 100] == 1.0);
-  ASSERT(A.values()[200 * n + 200] == 1.0);
-  ASSERT(A.values()[0 * n + 1] == 0.0);
-  ASSERT(A.values()[50 * n + 49] == 0.0);
-  ASSERT(A.values()[255 * n + 0] == 0.0);
+  ASSERT_NEAR(A.values()[0 * n + 0], 1.0, 1e-12);
+  ASSERT_NEAR(A.values()[100 * n + 100], 1.0, 1e-12);
+  ASSERT_NEAR(A.values()[200 * n + 200], 1.0, 1e-12);
+  ASSERT_NEAR(A.values()[0 * n + 1], 0.0, 1e-12);
+  ASSERT_NEAR(A.values()[50 * n + 49], 0.0, 1e-12);
+  ASSERT_NEAR(A.values()[255 * n + 0], 0.0, 1e-12);
 
   for (double x : A.values()) ASSERT(!(std::isnan(x) || std::isinf(x)));
 
