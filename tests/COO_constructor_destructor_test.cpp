@@ -44,12 +44,31 @@ TEST_CASE(test_COO_destructor_assembled)
 
 }
 
+template <typename T, size_t N, size_t M>
+TEST_CASE(test_COO_destructor)
+{ 
+    try {
+            {// begin scope exiting scope automatically calls destructor  
+                SpMV::SparseMatrix_COO<T> A(N,M); 
+        
+            } // destructor is called
+        std::cout << "COO destructor test pass (" << N << " by " << M << ")\n";
+        } 
+    catch (const std::exception &e){
+        std::cerr << "COO destructor test fail" << e.what() << std::endl;
+        ASSERT(false);
+    }
+
+}
+
 
 TEST_SUITE(my_suite) {
     TEST((test_COO_constructor<double, 3, 2>));
     TEST((test_COO_destructor<double, 2, 3>));
+    TEST((test_COO_destructor_assembled<double, 2, 3>));
     TEST((test_COO_constructor<float, 4, 5>));
     TEST((test_COO_destructor<float, 5, 4>));
+    TEST((test_COO_destructor_assembled<float, 5, 4>));
 
 } 
 
