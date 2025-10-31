@@ -12,9 +12,9 @@ namespace SpMV
     class SparseMatrix_COO : public SparseMatrix<fp_type>
     {
         protected: 
-            std::vector<fp_type> aij;
-            std::vector<size_t> idx_row_;
-            std::vector<size_t> idx_col_;
+            std::vector<fp_type> _aij;
+            std::vector<size_t> _idx_row;
+            std::vector<size_t> _idx_col;
 
         public:
             SparseMatrix_COO(const size_t nrows, const size_t ncols);
