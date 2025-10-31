@@ -22,7 +22,12 @@ namespace SpMV
 
             void assemble();
     
-    
+            void setValue(size_t i, size_t j, fp_type val) {
+            // placeholder: do nothing
+                (void)i;
+                (void)j;
+                (void)val;
+            }
             // Getters for testing
             size_t nrows() const { return this->_nrows; }
             size_t ncols() const { return this->_ncols; }
