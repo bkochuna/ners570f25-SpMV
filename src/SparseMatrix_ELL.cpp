@@ -13,17 +13,17 @@ template <class fp_type>
 SparseMatrix_ELL<fp_type>::SparseMatrix_ELL(const size_t nrows,
                                             const size_t ncols)
     : SparseMatrix<fp_type>::SparseMatrix(nrows, ncols) {
-  cout << "Hello from SparseMatrix_ELL Constructor" << endl;
+  
 }
 
 // Destructor
 template <class fp_type> SparseMatrix_ELL<fp_type>::~SparseMatrix_ELL() {
-  cout << "Goodbye from SparseMatrix_ELL Destructor" << endl;
+  
 }
 
 // Assemble placeholder
 template <class fp_type> void SparseMatrix_ELL<fp_type>::assemble() {
-  cout << "Hello from SparseMatrix_ELL assemble" << endl;
+  
 }
 
 // Perform a matrix-vector multiply using the stored ELL data layout.
