@@ -29,29 +29,28 @@ namespace SpMV
     template <class fp_type>
     void SparseMatrix_COO<fp_type>::view()
     {
-        assert(this->_state >= MatrixState::assembled);
+        // view() should only be called by a matrix in the assembled state. Check to see if this is true. 
+        assert(this->_state == MatrixState::assembled);
 
+        // if there are no elements, output that and end method.
         if (this->_idx_row.empty() || this->_idx_col.empty() || this->_aij.empty())
         {
             cout << "No Elements in Matrix " << endl;
             return;
         }
 
-        // find the largest elements in the row and column index arrays
+        //find the largest elements in the row and column index arrays
         typename std::vector<size_t>::iterator max_in_rows= std::max_element(this->_idx_row.begin(), this->_idx_row.end());
         typename std::vector<size_t>::iterator max_in_cols= std::max_element(this->_idx_col.begin(), this->_idx_col.end());
 
-        //find the length of those largest indicies
+        //find the number of digits in those largest indicies using the whole number of log10(index)+1
         int max_i =static_cast<int> (std::floor(std::log10(*max_in_rows)+1));
-        int max_j =static_cast<int> (std::floor(std::log10(*max_in_cols)+1));
-        //cout << max_i << ", " << max_j << endl;
-
+        int max_j =static_cast<int> (std::floor(std::log10(*max_in_cols)+1)); 
         //establish the required widths to print out 
-        int i_min = 9;
-        int j_min = 12;
-        int i_width = std::max(max_i, i_min);
-        int j_width = std::max(max_j, j_min);
-        //cout << i_width << ", " << j_width << endl;
+        int i_min = 9; //characters in "Row Index"
+        int j_min = 12; //characters in "Column Index"
+        int i_width = std::max(max_i, i_min); //if one of the indicies is larger than the header column, 
+        int j_width = std::max(max_j, j_min); //extra spaces must be added to keep columns aligned
 
         //print out the header;
         cout << "This is a matrix stored in the COO format. ";
