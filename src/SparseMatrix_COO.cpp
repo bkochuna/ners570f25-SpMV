@@ -1,5 +1,8 @@
 #include "SparseMatrix_COO.hpp"
 
+#include <iostream>
+#include <stddef.h>
+#include <cassert>
 
 using namespace std;
 
@@ -40,6 +43,31 @@ namespace SpMV
             }
         }
         return 0.0;
+    }
+
+    template <class fp_type>
+    std::vector<fp_type> SparseMatrix_COO<fp_type>::matvec(std::vector<fp_type> x) 
+    {
+        cout << "Hello from COO matvec" << endl;
+
+        //This routine implements matvec for the COO format.
+
+        //Make sure matrix is assembled
+        assert( this->_state == assembled );
+
+        //Input size must match column dimension of matrix
+        assert( this->_ncols == x.size() );
+
+        //Initialize return vector b with all zeros.
+        std::vector<fp_type> b( this->_nrows, 0.);
+
+        //For loop to perform matvec
+        for (size_t i=0; i < (this->_numnz) ; i++) {
+            b[this->idx_row_[i]] += this->aij_[i] * x[this->idx_col_[i]]; 
+        }
+
+        return b;
+
     }
 }
 
