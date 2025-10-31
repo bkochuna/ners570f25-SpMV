@@ -27,9 +27,16 @@ public:
     // Builder API (available only in Building state)
     inline void insert(index_type i, index_type j, value_type v) {
         if (_state != State::Building)
-            throw std::logic_error("CSR insert: matrix is assembled");
-        if (i >= this->_nrows || j >= this->_ncols)
-            throw std::out_of_range("CSR insert: index out of range");
+            throw std::logic_error("CSR insert: matrix is assembled (cannot insert in State::Assembled)");
+
+        if (i >= this->_nrows || j >= this->_ncols) {
+            throw std::out_of_range(
+                "CSR insert: index out of range. Got (i=" + std::to_string(i) + ", j=" + std::to_string(j) +
+                "), matrix shape = (" + std::to_string(this->_nrows) + " rows, " +
+                std::to_string(this->_ncols) + " cols). Valid i in [0," +
+                std::to_string(this->_nrows > 0 ? this->_nrows-1 : 0) + "], j in [0," +
+                std::to_string(this->_ncols > 0 ? this->_ncols-1 : 0) + "].");
+        }
         _triplets.emplace_back(Trip{i, j, v});
     }
 

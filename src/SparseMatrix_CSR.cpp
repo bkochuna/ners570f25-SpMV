@@ -30,10 +30,13 @@ void SparseMatrix_CSR<fp_type>::assemble()
 
     for (const auto &t : _triplets) {
         // Bounds (defensive; insert already checks)
-        if (t.i >= R || t.j >= C)
-            throw std::out_of_range("assembleStorage(): triplet out of range");
-        row_maps[t.i][t.j] += t.v;   // sum duplicates
-    }
+        if (t.i >= R || t.j >= C) {
+            throw std::out_of_range(
+                "assemble(): triplet index out of range: (i=" + std::to_string(t.i) +
+                ", j=" + std::to_string(t.j) + "), bounds: rows=[0," +
+                std::to_string(R > 0 ? R-1 : 0) + "], cols=[0," +
+                std::to_string(C > 0 ? C-1 : 0) + "]");
+        }
 
     // Row counts → prefix sum into _ia
     for (index_type i = 0; i < R; ++i)
@@ -81,7 +84,6 @@ void SparseMatrix_CSR<fp_type>::disassembleStorage()
 
     const index_type R = this->_nrows;
 
-    _triplets.clear();
     for (index_type i = 0; i < R; ++i) {
         const index_type beg = _ia[i];
         const index_type end = _ia[i + 1];
