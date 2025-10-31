@@ -135,8 +135,8 @@ namespace SpMV
 	{
 		assert(this->_state >= MatrixState::initialized);
 		
-		cout << "i=" << i << endl;
-		cout << "j=" << j << endl;
+		if (i < 0 || j < 0 || i >= this->_nrows || j >= this->_ncols) {
+			throw std::out_of_range("Invalid indices");}		
 
 		if (this->_state == MatrixState::building) {
 			auto found = this->_buildCoeff.find({i, j});
