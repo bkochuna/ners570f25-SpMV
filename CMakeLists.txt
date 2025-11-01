@@ -92,6 +92,7 @@ spmv_add_cxx_compiler_flag("-pedantic")
 set(SPMV_SOURCES
   "src/SparseMatrix.cpp"
   "src/SparseMatrix_COO.cpp"
+  "src/SparseMatrix_CSR.cpp"
 )
 
 add_library(spmv SHARED ${SPMV_SOURCES})
@@ -107,6 +108,8 @@ target_include_directories(spmv
 #===============================================================================
 
 # Enable testing
+# CSR matvec test
+
 include(CTest)
 enable_testing()
 add_subdirectory(tests)

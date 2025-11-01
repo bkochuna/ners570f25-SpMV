@@ -24,6 +24,37 @@ template <class fp_type> SparseMatrix_ELL<fp_type>::~SparseMatrix_ELL() {
 template <class fp_type> void SparseMatrix_ELL<fp_type>::assemble() {
   cout << "Hello from SparseMatrix_ELL assemble" << endl;
 }
+//Accessor implementation
+// --- Accessors Implementation ---
+template <class fp_type>
+const std::vector<int>& SpMV::SparseMatrix_ELL<fp_type>::getColInd() const
+{
+    if (this->_nrows == 0 || this->_ncols == 0)
+        throw std::runtime_error("ELL: getColInd() called on unconstructed or zero-size matrix.");
+    if (this->_state == MatrixState::undefined)
+        throw std::runtime_error("ELL: getColInd() called on uninitialized matrix.");
+    return _colIndices;
+}
+
+template <class fp_type>
+const std::vector<fp_type>& SpMV::SparseMatrix_ELL<fp_type>::getValues() const
+{
+    if (this->_nrows == 0 || this->_ncols == 0)
+        throw std::runtime_error("ELL: getValues() called on unconstructed or zero-size matrix.");
+    if (this->_state == MatrixState::undefined)
+        throw std::runtime_error("ELL: getValues() called on uninitialized matrix.");
+    return _values;
+}
+
+template <class fp_type>
+size_t SpMV::SparseMatrix_ELL<fp_type>::getMaxNnzPerRow() const
+{
+    if (this->_nrows == 0 || this->_ncols == 0)
+        throw std::runtime_error("ELL: getMaxNnzPerRow() called on unconstructed or zero-size matrix.");
+    if (this->_state == MatrixState::undefined)
+        throw std::runtime_error("ELL: getMaxNnzPerRow() called on uninitialized matrix.");
+    return _maxNnzPerRow;
+}
 } // namespace SpMV
 // Need to declare the concrete templates within the library for
 // use in code that links to libspmv
