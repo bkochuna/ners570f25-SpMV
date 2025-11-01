@@ -17,7 +17,7 @@ protected:
 public:
   SparseMatrix_ELL(const size_t nrows, const size_t ncols);
   ~SparseMatrix_ELL();
-  void assembleStorage(
+  void assemble(
     const std::vector<size_t>& i_idx,
     const std::vector<size_t>& j_idx,
     const std::vector<fp_type>& vals,
@@ -33,7 +33,7 @@ public:
         size_t ncols = 0;
     };
 
-  DisassembledData disassembleStorage() const;
+  DisassembledData disassemble() const;
 
     
 };

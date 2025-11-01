@@ -25,7 +25,7 @@ template <class fp_type> SparseMatrix_ELL<fp_type>::~SparseMatrix_ELL() {
 
 // Assemble 
 template <class fp_type> 
-void SparseMatrix_ELL<fp_type>::assembleStorage( 
+void SparseMatrix_ELL<fp_type>::assemble( 
     const std::vector<size_t>& i_idx,
     const std::vector<size_t>& j_idx,
     const std::vector<fp_type>& vals,
@@ -51,15 +51,15 @@ void SparseMatrix_ELL<fp_type>::assembleStorage(
   const auto& csrVals = csr.values(); // TO CONFIRM: PARAMETERS IN CSR CLASS
 
   // Find the max number of nonzeros in any row
-  _maxEntriesPerRow = 0;
+  _maxNnzPerRow = 0;
   for (size_t i = 0; i < _nrows; ++i) {
         size_t rowLen = rowPtr[i + 1] - rowPtr[i];
-        _maxEntriesPerRow = std::max(_maxEntriesPerRow, rowLen);
+        _maxNnzPerRow = std::max(_maxNnzPerRow, rowLen);
   }
   
   // Allocate ELL storage (Resize internal arrays)
-  _colIdx.assign(_nrows * _maxEntriesPerRow, std::numeric_limits<size_t>::max());
-  _values.assign(_nrows * _maxEntriesPerRow, fp_type(0));
+  _colIdx.assign(_nrows * _maxNnzPerRow, std::numeric_limits<size_t>::max());
+  _values.assign(_nrows * _maxNnzPerRow, fp_type(0));
 
   // Fill ELL (column-major ELLPACK layout)
   for (size_t row = 0; row < _nrows; ++row) {
@@ -76,7 +76,7 @@ void SparseMatrix_ELL<fp_type>::assembleStorage(
 
 //Disassemble:
 template <class fp_type>
-DisassembledData SparseMatrix_ELL<fp_type>::disassembleStorage() const
+DisassembledData SparseMatrix_ELL<fp_type>::disassemble() const
 {
   DisassembledData out;
 
@@ -86,7 +86,7 @@ DisassembledData SparseMatrix_ELL<fp_type>::disassembleStorage() const
   // Count number of non-zeros first (optional but avoids reallocation)
   size_t nnz = 0;
   for (size_t r = 0; r < _nrows; ++r) {
-      for (size_t k = 0; k < _maxEntriesPerRow; ++k) {
+      for (size_t k = 0; k < _maxNnzPerRow; ++k) {
           size_t idx = k * _nrows + r;
           if (_values[idx] != fp_type(0)) {
                 ++nnz;
@@ -100,7 +100,7 @@ DisassembledData SparseMatrix_ELL<fp_type>::disassembleStorage() const
 
   // Extract COO triplets directly from ELL
   for (size_t r = 0; r < _nrows; ++r) {
-      for (size_t k = 0; k < _maxEntriesPerRow; ++k) {
+      for (size_t k = 0; k < _maxNnzPerRow; ++k) {
             size_t idx = k * _nrows + r;
             size_t c = _colIdx[idx];
             fp_type v = _values[idx];
