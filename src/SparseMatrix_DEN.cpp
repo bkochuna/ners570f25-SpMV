@@ -115,7 +115,7 @@ namespace SpMV
 
 	////// Matvec Function(s)
 	template <class fp_type>
-    std::vector<fp_type> SparseMatrix_DEN<fp_type>::matvec(const std::vector<fp_type>& x) const
+    std::vector<fp_type>* SparseMatrix_DEN<fp_type>::matvec(const std::vector<fp_type>& x) const
     {
         assert(this->_state == MatrixState::assembled);
         assert(x.size() == this->_ncols);
