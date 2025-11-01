@@ -5,17 +5,7 @@
 #include "spmv/jds_storage.hpp"
 #include <iostream>
 
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReadMe.md first!!!
 
 namespace SpMV
 {

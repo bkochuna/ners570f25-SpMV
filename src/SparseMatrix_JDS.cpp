@@ -2,17 +2,8 @@
 
 using namespace std;
 
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
-//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReadMe.md first!!!
+//PLEASE READ THE ReadMe.md first!!!
 
 namespace SpMV
 {
@@ -40,7 +31,7 @@ namespace SpMV
         //access jdsResultVector properties and print summary
         //check if result vector exists
         if (!this->hasResultVector()) { // assume you add a helper function
-            cerr << "Error: result vector not computed yet. SparseMatrix_JDS.cpp, Line 25" << endl;
+            cerr << "Error: result vector not computed yet. File: " << __FILE__ << ", Line: " << __LINE__ << endl;
             return;
         }
         auto jdsVector = this->holderGetJDSResultVector();
@@ -95,7 +86,8 @@ namespace SpMV
         //access jdsResultVector properties and print summary
         //check if result vector exists
         if (!this->hasResultVector()) { // assume you add a helper function
-            cerr << "Error: result vector not computed yet. SparseMatrix_JDS.cpp, Line 75" << endl;
+            cerr << "Error: result vector not computed yet." << endl;
+            cerr << "File: " << __FILE__ << ", Line: " << __LINE__ << endl;
             return;
         }
         //
@@ -124,11 +116,18 @@ namespace SpMV
 
         // Search for the element at (row, column)
         double value = 0;
+        bool found = false;
         for (size_t i = 0; i < coo.row.size(); ++i) {
             if (coo.row[i] == row && coo.col[i] == column) {
                 value = coo.val[i];
+                found = true;
                 break;
             }
+        }
+
+        if (!found) {
+            cerr << "Index out of bounds. File: " << __FILE__ << ", Line: " << __LINE__ << endl;
+            return;
         }
 
         std::cout << "Value at (" << row << ", " << column << ") = " << value << std::endl;
@@ -147,7 +146,8 @@ namespace SpMV
     void SparseMatrix_JDS<fp_type>::printJDSResultVectorElementToConsole(const size_t index) const{
         //access jdsResultVector properties and print single element
         if (!this->hasResultVector()) { // assume you add a helper function
-            cerr << "Error: result vector not computed yet. SparseMatrix_JDS.cpp, Line 110" << endl;
+            cerr << "Error: result vector not computed yet" << endl;
+            cerr << "File: " << __FILE__ << ", Line: " << __LINE__ << endl;
             return;
         }
         auto jdsVector = this->holderGetJDSResultVector();
@@ -161,7 +161,8 @@ namespace SpMV
         //access jdsResultVector properties and print to log file
         //check if result vector exists
         if (!this->hasResultVector()) { // assume you add a helper function
-            cerr << "Error: result vector not computed yet. SparseMatrix_JDS.cpp, Line 132" << endl;
+            cerr << "Error: result vector not computed yet." << endl;
+            cerr << "File: " << __FILE__ << ", Line: " << __LINE__ << endl;
             return;
         }
         auto jdsVector = this->holderGetJDSResultVector(); //Assuming the matrix is stored here
@@ -170,6 +171,7 @@ namespace SpMV
         ofstream file(filename);
         if (!file.is_open()) {
             cerr << "Error: could not open file " << filename << endl;
+            cerr << "File: " << __FILE__ << ", Line: " << __LINE__ << endl;
             return;
         }
 
