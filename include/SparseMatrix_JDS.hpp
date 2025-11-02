@@ -27,7 +27,11 @@ namespace SpMV
         void matvec(const std::vector<fp_type>& x, std::vector<fp_type>& y) const;
 
 
-	// Accessor Methods
+	//--- Accessor Methods ---
+	// Overriding base class accessors
+	fp_type getValue(const size_t i, const size_t j) override;
+        void setValue(const size_t i, const size_t j, fp_type val) override;	
+	
 	// Array accessors (Map these to Lecture 12 naming in src)
 	const fp_type* get_jdiag() const;
 	const size_t* get_col_ind() const;
