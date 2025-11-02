@@ -5,6 +5,8 @@
 #include <stddef.h>
 #include "SparseMatrix.hpp"
 #include <vector>
+#include <cstddef>
+#include <iostream>
 
 namespace SpMV
 {
@@ -17,11 +19,32 @@ namespace SpMV
             std::vector<size_t> _idx_col;
 
         public:
-            SparseMatrix_COO(const size_t nrows, const size_t ncols);
+            SparseMatrix_COO(size_t nrows, size_t ncols)
+                : SparseMatrix<fp_type>(nrows, ncols)
+            {
+                std::cout << "Hello from COO Constructor" << std::endl;
+            }
+
+            virtual ~SparseMatrix_COO() noexcept = default;
+
             void assemble();
+    
+            void setValue(size_t i, size_t j, fp_type val) {
+            // placeholder: do nothing
+                (void)i;
+                (void)j;
+                (void)val;
+            }
+            // Getters for testing
+            size_t nrows() const { return this->_nrows; }
+            size_t ncols() const { return this->_ncols; }
+            size_t numnz() const { return this->_numnz; }
+            MatrixState getState() const { return this->_state; }
+            bool buildCoeffEmpty() const { return this->_buildCoeff.empty(); }
+            size_t buildCoeffSize() const { return this->_buildCoeff.size(); }
             void view();
 
-            void    setValue(const size_t i, const size_t j, fp_type val);
+            //void    setValue(const size_t i, const size_t j, fp_type val);
             fp_type getValue(const size_t i, const size_t j);
 
             /**

@@ -11,12 +11,6 @@ using namespace std;
 
 namespace SpMV
 {
-    template <class fp_type>
-    SparseMatrix_COO<fp_type>::SparseMatrix_COO(const size_t nrows, const size_t ncols) :
-        SparseMatrix<fp_type>::SparseMatrix(nrows, ncols)
-    {
-        cout << "Hello from COO Constructor" << endl;
-    }
 
     template <class fp_type>
     void SparseMatrix_COO<fp_type>::assemble()
