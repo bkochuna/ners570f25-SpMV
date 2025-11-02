@@ -12,13 +12,16 @@ namespace SpMV
     class SparseMatrix_COO : public SparseMatrix<fp_type>
     {
         protected: 
-            std::vector<fp_type> aij;
-            std::vector<size_t> idx_row_;
-            std::vector<size_t> idx_col_;
+            std::vector<fp_type> _aij;
+            std::vector<size_t> _idx_row;
+            std::vector<size_t> _idx_col;
 
         public:
             SparseMatrix_COO(const size_t nrows, const size_t ncols);
             void assemble();
+
+
+
             void view();
 
             void    setValue(const size_t i, const size_t j, fp_type val);
@@ -31,6 +34,13 @@ namespace SpMV
              * @return std::vector<fp_type> 
              */
             std::vector<fp_type> matvec(std::vector<fp_type> x);
+            
+            
+     // Create a friend class to access private variables
+	   #ifdef COO_UNIT_TEST
+	   template <typename T>
+	   friend class TestSparseMatrixCOO;
+	   #endif
     };
 }
 

@@ -75,15 +75,17 @@ namespace SpMV
             cout << left << this->_idx_col[i] << " | ";
             cout << this->_aij[i] << endl;
         }
-    void SparseMatrix_COO<fp_type>::setValue(const size_t i, const size_t j, fp_type val) :
-        SparseMatrix<fp_type>::setValue(i, j, val)
+    }
+    template <class fp_type>
+    void SparseMatrix_COO<fp_type>::setValue(const size_t i, const size_t j, fp_type val)
+        {SparseMatrix<fp_type>::setValue(i, j, val);}
 
     template <class fp_type>
-    fp_type SparseMatrix_COO<fp_type>::getValue(const size_t i, const size_t j) :
+    fp_type SparseMatrix_COO<fp_type>::getValue(const size_t i, const size_t j) 
     {
         assert(this->_state >= MatrixState::assembled);
-        assert(i < this->_nrow);
-        assert(j < this->_ncol);
+        assert(i < this->_nrows);
+        assert(j < this->_ncols);
         
         // Traverse the nz values and find the value at (i,j)
         for (size_t idx = 0; idx < this->_numnz; idx++)
@@ -114,7 +116,8 @@ namespace SpMV
 
         //For loop to perform matvec
         for (size_t i=0; i < (this->_numnz) ; i++) {
-            b[this->idx_row_[i]] += this->aij_[i] * x[this->idx_col_[i]]; 
+            b[this->_idx_row[i]] += this->_aij[i] * x[this->_idx_col[i]]; 
+            b[this->_idx_row[i]] += this->_aij[i] * x[this->_idx_col[i]]; 
         }
 
         return b;
