@@ -2,31 +2,38 @@
 #define __SPMV_SparseMatrix_JDS__
 
 #include "SparseMatrix.hpp"
-#include <vector>
+#include <iostream>
 
-namespace SpMV {
+//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReaadMe.md first!!!
+//PLEASE READ THE ReaadMe.md first!!!
 
-template <class fp_type>
-class SparseMatrix_JDS : public SparseMatrix<fp_type> {
-protected:
-    // JDS format storage components
-    std::vector<int> _perm{};           // Row permutation vector
-    std::vector<int> _jd_ptr{};         // Starting index of each jagged diagonal
-    std::vector<int> _colIndices{};     // Column indices for each value
-    std::vector<fp_type> _values{};     // Non-zero values stored jagged-diagonally
-    size_t _numDiagonals = 0;           // Number of diagonals in JDS format
+namespace SpMV
+{
+    template <class fp_type>
+    class SparseMatrix_JDS : public SparseMatrix<fp_type>
+    {
+        public:
+            printJDSInputMatrixSummary() const;
+            printJDSInputVectorSummary() const;
+            printJDSResultVectorSummary() const;
+            printJDSMatrixToConsole() const;
+            printJDSVectorToConsole() const;
+            printJDSResultVectorToConsole() const;
+            printJDSMatrixElementToConsole(const size_t row, const size_t column) const;
+            printJDSVectorElementToConsole(const size_t index) const;
+            printJDSResultVectorElementToConsole(const size_t index) const;
+            printJDSMatrixRow(size_t row) const;
+            printJDSResultVectorToLogFile(const std::string& filename) const;
+    };
+}
 
-public:
-    // Constructor
-    SparseMatrix_JDS(const size_t nrows, const size_t ncols);
-
-    // Destructor
-    ~SparseMatrix_JDS() = default;
-
-    // Assemble JDS from COO/CSR (optional to implement now)
-    void assemble();
-};
-
-} // namespace SpMV
-
-#endif // __SPMV_SparseMatrix_JDS__
+#endif
