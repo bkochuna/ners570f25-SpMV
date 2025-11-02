@@ -11,6 +11,14 @@ namespace SpMV
         public:
             SparseMatrix_COO(const size_t nrows, const size_t ncols);
             void assemble();
+
+
+		// Create a friend class to access private variables
+		#ifdef COO_UNIT_TEST
+		template <typename T>
+		friend class TestSparseMatrixCOO;
+		#endif
+
     };
 }
 
