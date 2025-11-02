@@ -13,7 +13,7 @@ TEST_CASE(test_DEN_constructor_double){
     ASSERT(A.ncols == 6);
 
     // check that object state is initialized
-    ASSERT(A._state == SpMV::MatrixState::initialized)
+    ASSERT(A._state == SpMV::MatrixState::initialized);
 }
 
 TEST_CASE(test_DEN_destructor_double){
