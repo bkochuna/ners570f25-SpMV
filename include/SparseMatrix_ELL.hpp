@@ -20,7 +20,7 @@ protected:
   /**
    * Maximum number of non-zero entries per row.
    */
-  size_t _maxNnzPerRow = 0;
+  size_t _maxEntriesPerRow = 0;
 
   /**
    * Value used to indicate padding in _colIndices{} for ELL matrix format.
@@ -37,7 +37,7 @@ protected:
    * Column indices for each stored value.
    * Signed type allows using `paddingValue` (-1) to mark unused slots.
    */
-  std::vector<int> _colIndices{};
+  std::vector<int> _colIdx{};
 
 public:
   /**
@@ -61,6 +61,7 @@ public:
    * representation
    */
   void assemble();
+  std::vector<fp_type> matvec(const std::vector<fp_type> &x) const;
 };
 } // namespace SpMV
 
