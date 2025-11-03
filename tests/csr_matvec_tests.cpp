@@ -19,7 +19,7 @@ TEST_CASE(CSR_matvec_square)
     SpMV::SparseMatrix_CSR<T> A(m, n, rowPtr, colInd, values);
 
     std::vector<T> x = {T(1), T(2), T(3)};
-    std::vector<T> y(m, 0);
+    std::vector<T> y(m, T(0);
 
     A.matvec(x, y);
 
@@ -45,7 +45,7 @@ TEST_CASE(CSR_matvec_tall)
     SpMV::SparseMatrix_CSR<T> A(m, n, rowPtr, colInd, values);
 
     std::vector<T> x = {T(1), T(2)};
-    std::vector<T> y(m, 0);
+    std::vector<T> y(m, T(0));
 
     A.matvec(x, y);
 
@@ -69,7 +69,7 @@ TEST_CASE(CSR_matvec_wide)
     SpMV::SparseMatrix_CSR<T> A(m, n, rowPtr, colInd, values);
 
     std::vector<T> x = {T(1), T(2), T(3), T(4)};
-    std::vector<T> y(m, 0);
+    std::vector<T> y(m, T(0));
 
     A.matvec(x, y);
 
@@ -92,7 +92,7 @@ TEST_CASE(CSR_matvec_zero_cases)
         SpMV::SparseMatrix_CSR<T> A(m, n, rowPtr, colInd, values);
 
         std::vector<T> x = {T(1), T(2), T(3)};
-        std::vector<T> y(m, 0);
+        std::vector<T> y(m, T(0));
         A.matvec(x, y);
 
         for (auto v : y)
@@ -107,8 +107,8 @@ TEST_CASE(CSR_matvec_zero_cases)
         std::vector<T> values = {T(1), T(2), T(3), T(4), T(5)};
         SpMV::SparseMatrix_CSR<T> A(m, n, rowPtr, colInd, values);
 
-        std::vector<T> x(n, 0);
-        std::vector<T> y(m, 0);
+        std::vector<T> x(n, T(0));
+        std::vector<T> y(m, T(0));
         A.matvec(x, y);
 
         for (auto v : y)

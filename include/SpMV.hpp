@@ -3,7 +3,7 @@
 
 #include "SparseMatrix.hpp"
 #include "SparseMatrix_COO.hpp"
-#include "SparseMatrix_ELL.hpp"
 #include "SparseMatrix_CSR.hpp"
+#include "SparseMatrix_ELL.hpp"
 
 #endif
