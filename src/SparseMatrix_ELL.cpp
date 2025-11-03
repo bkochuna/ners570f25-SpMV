@@ -11,7 +11,7 @@ namespace SpMV {
 template <class fp_type>
 SparseMatrix_ELL<fp_type>::SparseMatrix_ELL(const size_t nrows,
                                             const size_t ncols)
-    : SparseMatrix<fp_type>::SparseMatrix(nrows, ncols) {
+    : SparseMatrix<fp_type>(nrows, ncols) {
   cout << "Hello from SparseMatrix_ELL Constructor" << endl;
 }
 
@@ -27,7 +27,7 @@ template <class fp_type> void SparseMatrix_ELL<fp_type>::assemble() {
 //Accessor implementation
 // --- Accessors Implementation ---
 template <class fp_type>
-const std::vector<int>& SpMV::SparseMatrix_ELL<fp_type>::getColInd() const
+const std::vector<int>& SparseMatrix_ELL<fp_type>::getColInd() const
 {
     if (this->_nrows == 0 || this->_ncols == 0)
         throw std::runtime_error("ELL: getColInd() called on unconstructed or zero-size matrix.");
