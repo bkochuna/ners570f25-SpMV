@@ -69,7 +69,7 @@ namespace SpMV
         assert(j < this->getNumCols());
         assert(this->getState() == MatrixState::assembled);
 
-        for(size_t n; n < this->getNumNonZeros(); n++) {
+        for(size_t n = 0; n < this->getNumNonZeros(); n++) {
             if(i == this->_I[n] && j == this->_J[n])
                 return this->_val[n];
         }
