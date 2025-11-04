@@ -45,7 +45,7 @@ namespace SpMV
         this->setState(MatrixState::building);
 
         size_t nnz = this->getNumNonZeros();
-        for(size_t n = 0; n < nnz; n++) {
+        for(size_t n = 0; n < nnz; ++n) {
             size_t    i = this->_I[n];
             size_t    j = this->_J[n];
             fp_type aij = this->_val[n];
@@ -69,7 +69,7 @@ namespace SpMV
         assert(j < this->getNumCols());
         assert(this->getState() == MatrixState::assembled);
 
-        for(size_t n = 0; n < this->getNumNonZeros(); n++) {
+        for(size_t n = 0; n < this->getNumNonZeros(); ++n) {
             if(i == this->_I[n] && j == this->_J[n])
                 return this->_val[n];
         }
