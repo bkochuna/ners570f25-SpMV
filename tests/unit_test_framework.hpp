@@ -14,6 +14,7 @@
 #include <cstdio>  // printf
 #include <cstdlib> // std::abs, exit
 #include <iostream> // std::cout, std::endl
+#include <limits>  //std::numeric_limits
 
 #undef NDEBUG
 #include <cassert>
@@ -28,6 +29,8 @@
 // Similar to the C++ testing framework Catch2, but much simpler.
 
 #define ASSERT(cond) assert(cond)
+
+#define TWO_EPS std::numeric_limits<T>::epsilon()*static_cast<T>(2.0)
 
 #define ASSERT_NEAR(a, b, eps)                                                           \
   {                                                                                      \
