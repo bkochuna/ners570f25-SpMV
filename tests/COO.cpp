@@ -5,7 +5,7 @@
 using namespace SpMV;
 
 template <typename T>
-TEST_CASE(constructor) 
+TEST_CASE(constructor)
 {
   SparseMatrix_COO<T> A(2,3);
   
@@ -17,7 +17,7 @@ TEST_CASE(constructor)
 } // constructor
 
 template <typename T>
-TEST_CASE(polymorhphic_constructor) 
+TEST_CASE(polymorhphic_constructor)
 {
   SparseMatrix<T>* ptr_A = new SparseMatrix_COO<T>(2,3);
   
@@ -31,7 +31,7 @@ TEST_CASE(polymorhphic_constructor)
 } // polymorphic constructor
 
 template <typename T>
-TEST_CASE(construct_zero) 
+TEST_CASE(construct_zero)
 {
   SparseMatrix_COO<T> A(0,0);
   
@@ -44,7 +44,7 @@ TEST_CASE(construct_zero)
 } // construct_zero
 
 template <typename T>
-TEST_SUITE(constructors) 
+TEST_SUITE(constructors)
 {
   TEST(constructor<T>);
   TEST(polymorhphic_constructor<T>);
@@ -108,7 +108,7 @@ TEST_CASE(double_set)
 } // double_set
 
 template <typename T>
-TEST_SUITE(setget_values) 
+TEST_SUITE(setget_values)
 {
   TEST(get_value_no_set<T>);
   TEST(setget_square<T>);
@@ -118,6 +118,72 @@ TEST_SUITE(setget_values)
 
 /*****************************************************************************/
 // for assemble
+template <typename T>
+TEST_CASE(assemble_square)
+{
+    SparseMatrix_COO<T> A(2,2);
+
+    A.setValue(0,0,1.0);
+    A.setValue(1,0,2.0);
+    A.setValue(0,1,3.0);
+    A.setValue(1,1,4.0);
+    A.assemble();
+
+    ASSERT(A.getState() == MatrixState::assembled);
+    ASSERT_NEAR(A.getValue(0,0),static_cast<T>(1.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(1,0),static_cast<T>(2.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(0,1),static_cast<T>(3.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(1,1),static_cast<T>(4.0),TWO_EPS);
+}
+
+template <typename T>
+TEST_CASE(assemble_diagonal)
+{
+    SparseMatrix_COO<T> A(3,3);
+
+    A.setValue(0,0,1.0);
+    A.setValue(1,1,2.0);
+    A.setValue(2,2,3.0);
+    A.assemble();
+
+    ASSERT_NEAR(A.getValue(0,0),static_cast<T>(1.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(1,1),static_cast<T>(2.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(2,2),static_cast<T>(3.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(0,1),static_cast<T>(0.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(0,2),static_cast<T>(0.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(1,0),static_cast<T>(0.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(2,0),static_cast<T>(0.0),TWO_EPS);
+}
+
+template <typename T>
+TEST_CASE(reassemble)
+{
+    SparseMatrix_COO<T> A(2,2);
+
+    A.setValue(0,0,1.0);
+    A.setValue(1,1,2.0);
+    A.assemble();
+
+    A.setValue(0,0,3.0);
+    ASSERT(A.getState() == MatrixState::building);
+    A.setValue(1,0,1.0);
+    A.assemble();
+
+    ASSERT(A.getState() == MatrixState::assembled);
+    ASSERT_NEAR(A.getValue(0,0),static_cast<T>(3.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(1,0),static_cast<T>(1.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(0,1),static_cast<T>(2.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(1,1),static_cast<T>(0.0),TWO_EPS);
+
+}
+
+template <typename T>
+TEST_SUITE(assemble)
+{
+  TEST(assemble_square<T>);
+  TEST(assemble_diagonal<T>);
+
+} // assemble
 
 /*****************************************************************************/
 // for matvec
@@ -133,6 +199,9 @@ main() -> int
 
   RUN_SUITE(setget_values<float>);
   RUN_SUITE(setget_values<double>);
+
+  RUN_SUITE(assemble<float>);
+  RUN_SUITE(assemble<double>);
 
   return 0;
 }
