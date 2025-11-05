@@ -4,11 +4,15 @@
 #include <stddef.h>
 #include <map>
 #include <utility>
+#include <vector>
 
 using namespace std;
 
 namespace SpMV
 {
+    // Simplify writing std::vector as Vec
+    template <typename fp_type>
+    using Vec = std::vector<fp_type>;
 
     // Enumerations for matrix state to support builder pattern
     enum MatrixState {undefined, initialized, building, assembled};
@@ -47,7 +51,9 @@ namespace SpMV
         void    setValue(const size_t i, const size_t j, fp_type val);
         fp_type getValue(const size_t i, const size_t j) const;
         virtual void assemble() =0; // The "=0" defines this class as abstract
-        virtual void matvec() =0;
+
+        virtual Vec<fp_type> matvec(const Vec<fp_type>& x) =0;
+        virtual fp_type* matvec(const size_t n, const fp_type* x) =0;
     };
 }
 

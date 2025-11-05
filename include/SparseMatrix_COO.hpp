@@ -23,7 +23,9 @@ namespace SpMV
             SparseMatrix_COO(const size_t nrows, const size_t ncols);
             ~SparseMatrix_COO() override;
             void assemble() override;
-            void matvec() override;
+
+            virtual Vec<fp_type> matvec(const Vec<fp_type>& x) override;
+            virtual fp_type* matvec(const size_t n, const fp_type* x) override;
     };
 }
 

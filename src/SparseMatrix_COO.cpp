@@ -103,9 +103,21 @@ namespace SpMV
     }
 
     template <class fp_type>
-    void SparseMatrix_COO<fp_type>::matvec()
+    Vec<fp_type> SparseMatrix_COO<fp_type>::matvec(const Vec<fp_type>& x)
     {
+        Vec<fp_type> y;
         //Not implemented yet
+        std::cout << x.size() << std::endl; // to avoid unused parameters
+
+        return y;
+    }
+
+    template <class fp_type>
+    fp_type* SparseMatrix_COO<fp_type>::matvec(const size_t n, const fp_type* x)
+    {
+        // Not yet implemented
+        std::cout << n << x[n] << std::endl; // to avoid unused parameters
+        return nullptr;
     }
 }
 
