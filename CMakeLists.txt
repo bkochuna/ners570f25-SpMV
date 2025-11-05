@@ -124,7 +124,13 @@ target_include_directories(spmv
 )
 
 #===============================================================================
-# Other directories
+# Define Install
+#===============================================================================
+install(TARGETS spmv DESTINATION lib)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include DESTINATION include)
+
+#===============================================================================
+# Other directories (tests and examples)
 #===============================================================================
 
 # Enable testing
