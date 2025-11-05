@@ -33,6 +33,9 @@ void SparseMatrix<fp_type>::setValue(const size_t i, const size_t j, fp_type val
     assert(i < this->getNumRows());
     assert(j < this->getNumCols());
 
+    if(this->getState() == MatrixState::assembled)
+        this->_disassemble();
+
     this->_state = MatrixState::building;
 
     //Store value

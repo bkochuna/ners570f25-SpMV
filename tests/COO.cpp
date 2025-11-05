@@ -172,8 +172,8 @@ TEST_CASE(reassemble)
     ASSERT(A.getState() == MatrixState::assembled);
     ASSERT_NEAR(A.getValue(0,0),static_cast<T>(3.0),TWO_EPS);
     ASSERT_NEAR(A.getValue(1,0),static_cast<T>(1.0),TWO_EPS);
-    ASSERT_NEAR(A.getValue(0,1),static_cast<T>(2.0),TWO_EPS);
-    ASSERT_NEAR(A.getValue(1,1),static_cast<T>(0.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(0,1),static_cast<T>(0.0),TWO_EPS);
+    ASSERT_NEAR(A.getValue(1,1),static_cast<T>(2.0),TWO_EPS);
 
 }
 
@@ -182,6 +182,7 @@ TEST_SUITE(assemble)
 {
   TEST(assemble_square<T>);
   TEST(assemble_diagonal<T>);
+  TEST(reassemble<T>);
 
 } // assemble
 
