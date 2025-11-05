@@ -1,0 +1,20 @@
+BasedOnStyle: LLVM
+
+AlwaysBreakTemplateDeclarations: Yes
+BreakBeforeBraces: Linux
+IndentAccessModifiers: true
+IndentCaseLabels: false
+IndentWidth: 4
+ContinuationIndentWidth: 2
+ColumnLimit: 90
+AlignArrayOfStructures: Right
+PackConstructorInitializers: Never
+PointerAlignment: Left
+ReferenceAlignment: Right
+IncludeBlocks: Preserve
+IndentPPDirectives: AfterHash
+AlignConsecutiveDeclarations: true
+AlignConsecutiveMacros: Consecutive
+AlignEscapedNewlines: Right
+AlignOperands: Align
+...
