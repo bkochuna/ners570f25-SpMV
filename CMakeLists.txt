@@ -83,6 +83,27 @@ spmv_add_cxx_compiler_flag("-Wundef")
 spmv_add_cxx_compiler_flag("-Werror")
 spmv_add_cxx_compiler_flag("-Wold-style-cast")
 spmv_add_cxx_compiler_flag("-pedantic")
+spmv_add_cxx_compiler_flag("-Wsign-conversion")
+spmv_add_cxx_compiler_flag("-Wuninitialized")
+
+
+# Flags for coverage
+if(SPMV_ENABLE_COVERAGE)
+  message("")
+  message(STATUS "Enabling code coverage flags")
+
+  # This flag is needed for coverage. For some reason it must be set
+  # manually, the CMake provided check_cxx_compiler_flag fails for this
+  # option for some reason
+  message(STATUS "Performing Test COMPILER_SUPPORT_fprofilearcs")
+  message(STATUS "Performing Test COMPILER_SUPPORT_fprofilearcs - Success")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs")
+
+  spmv_add_cxx_compiler_flag("-ftest-coverage")
+  spmv_add_cxx_compiler_flag("-g")
+  spmv_add_cxx_compiler_flag("-O0")
+  message("")
+endif()
 
 #===============================================================================
 # Create the library
