@@ -61,6 +61,7 @@ public:
    * representation
    */
   void assemble();
+  void viewMat();
   std::vector<fp_type> matvec(const std::vector<fp_type> &x) const;
 };
 } // namespace SpMV
